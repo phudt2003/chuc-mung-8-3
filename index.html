@@ -97,6 +97,8 @@
             position: relative;
             opacity: 0;
             display: none;
+            flex-direction: column; /* Thêm để quản lý khoảng cách dọc */
+            align-items: center;    /* Căn giữa các phần tử con */
             transition: opacity 1s ease-out;
         }
 
@@ -132,19 +134,19 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 6. CÂY TÌNH YÊU FRACTAL (VẼ BẰNG JS & SVG) --- */
+        /* --- 6. CÂY TÌNH YÊU FRACTAL --- */
         #tree {
             position: relative;
             width: 100%;
             max-width: 650px;
-            aspect-ratio: 6 / 5; /* Giữ form chuẩn kể cả trên điện thoại */
-            margin: 20px auto 40px auto;
+            height: 500px; /* Cố định chiều cao để rễ cây có điểm kết thúc xác định */
+            margin: 20px auto 0 auto; /* Đưa margin-bottom về 0 */
             opacity: 0;
-            display: none; /* Hiển thị qua JS */
+            display: none; 
             transition: opacity 1s ease-out;
+            overflow: visible;
         }
 
-        /* SVG để vẽ thân và cành cây */
         #tree-svg {
             position: absolute;
             top: 0; left: 0;
@@ -153,7 +155,6 @@
             overflow: visible;
         }
 
-        /* Hiệu ứng mọc cành cây */
         #tree-svg line {
             stroke-dasharray: var(--path-length);
             stroke-dashoffset: var(--path-length);
@@ -164,13 +165,12 @@
             to { stroke-dashoffset: 0; }
         }
 
-        /* Vùng chứa lá tim */
         #heart-canopy {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 3;
-            pointer-events: none; /* Tránh chặn click vào cây tạo pháo hoa */
+            pointer-events: none;
         }
 
         .heart-leaf {
@@ -200,8 +200,9 @@
 
         /* --- 7. MUSIC PLAYER --- */
         .music-wrapper {
+            width: 100%;
             max-width: 500px;
-            margin: 0 auto;
+            margin: 20px auto 0 auto; /* CÁCH RỄ CÂY CHÍNH XÁC 20PX */
             padding: 15px 25px;
             background: rgba(255, 255, 255, 0.6);
             border-radius: 50px;
@@ -211,6 +212,7 @@
             justify-content: space-between;
             gap: 15px;
             box-shadow: 0 5px 15px rgba(216, 27, 96, 0.05);
+            z-index: 20;
         }
 
         .song-info {
@@ -226,12 +228,6 @@
         audio {
             width: 100%; height: 35px; outline: none;
         }
-        
-        audio::-webkit-media-controls-panel { background-color: transparent; }
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-timeline,
-        audio::-webkit-media-controls-volume-slider { color: #d81b60; }
     </style>
 </head>
 <body id="body">
@@ -266,6 +262,7 @@
                 <source src="Perfect.mp3" type="audio/mpeg">
             </audio>
         </div>
+
         <p class="fade-in-line" data-delay="4" style="margin-top: 15px; color:#888; font-size: 0.9rem;">
             Chạm vào tán cây để tạo thêm pháo hoa nhé!
         </p>
@@ -286,12 +283,12 @@
         let isStarted = false;
 
         function startBlessing(e) {
-            if (e.target.tagName.toLowerCase() === 'audio') return; 
+            if (e.target.tagName.toLowerCase() === 'audio' || e.target.closest('.music-wrapper')) return; 
             
             if (!isStarted) {
                 isStarted = true;
                 instruction.style.display = 'none';
-                card.style.display = 'block';
+                card.style.display = 'flex'; // Chuyển từ block sang flex
                 setTimeout(() => card.style.opacity = '1', 50);
 
                 audio.play().catch(e => console.log("Audio play blocked:", e));
@@ -301,14 +298,12 @@
                     setTimeout(() => line.classList.add('active'), delay * 1000);
                 });
 
-                // Chờ đọc chữ xong rồi mới hiện cây
                 setTimeout(() => {
                     tree.style.display = 'block';
                     setTimeout(() => tree.style.opacity = '1', 50);
                     startGrowingTree();
                 }, 3500);
             } else if (e.target.closest('#tree')) {
-                // Tương tác chạm cây ra pháo hoa
                 createFirework(e.clientX, e.clientY);
             }
         }
@@ -329,7 +324,7 @@
             setTimeout(() => element.remove(), 9000);
         }, 300); 
 
-        // --- THUẬT TOÁN VẼ CÂY FRACTAL BẰNG SVG ---
+        // --- THUẬT TOÁN VẼ CÂY FRACTAL ---
         function drawBranch(x, y, len, angle, depth, branchWidth) {
             if (depth === 0) return;
 
@@ -341,21 +336,18 @@
             line.setAttribute('y1', y);
             line.setAttribute('x2', x2);
             line.setAttribute('y2', y2);
-            line.style.stroke = '#5c3a21'; // Màu vỏ cây nâu sẫm
+            line.style.stroke = '#5c3a21'; 
             line.style.strokeWidth = branchWidth;
             line.style.strokeLinecap = 'round';
 
-            // Setup hiệu ứng vẽ
             const pathLength = Math.sqrt((x2-x)**2 + (y2-y)**2);
             line.style.setProperty('--path-length', pathLength);
             
-            // Cành lớn vươn ra trước, cành con vươn ra sau
             const delay = (7 - depth) * 0.15; 
             line.style.animation = `growLine 0.5s ease-out forwards ${delay}s`;
 
             treeSvg.appendChild(line);
 
-            // Tẽ 2 cành ngẫu nhiên
             const angleOffset1 = 0.2 + Math.random() * 0.25;
             const angleOffset2 = 0.2 + Math.random() * 0.25;
             const lenFactor = 0.7 + Math.random() * 0.15;
@@ -363,40 +355,32 @@
             drawBranch(x2, y2, len * lenFactor, angle - angleOffset1, depth - 1, branchWidth * 0.7);
             drawBranch(x2, y2, len * lenFactor, angle + angleOffset2, depth - 1, branchWidth * 0.7);
 
-            // Thêm một cành mọc giữa (để cây trông sum suê hơn)
             if (depth > 2 && Math.random() > 0.4) {
                 drawBranch(x2, y2, len * 0.6, angle + (Math.random()*0.2 - 0.1), depth - 1, branchWidth * 0.6);
             }
         }
 
-        // --- BẢNG MÀU LÁ TIM ĐA DẠNG (NHƯ HÌNH MẪU) ---
-        const heartColors = [
-            '#ff4d4d', '#ff80df', '#33ccff', '#ffcc00', '#cc33ff', 
-            '#ff9933', '#ff1a75', '#0099ff', '#ffb366', '#d81b60', 
-            '#ff0066', '#9933ff', '#ff5050'
-        ];
+        const heartColors = ['#ff4d4d', '#ff80df', '#33ccff', '#ffcc00', '#cc33ff', '#ff9933', '#ff1a75', '#0099ff', '#ffb366', '#d81b60', '#ff0066', '#9933ff', '#ff5050'];
 
         function startGrowingTree() {
             treeSvg.innerHTML = '';
             heartCanopy.innerHTML = '';
 
-            // 1. Vẽ thân cây và cành (Hắt lên trên)
+            // Vẽ thân (Gốc ở 460 để rễ mọc xuống dưới 500)
             drawBranch(300, 460, 100, -Math.PI / 2, 7, 18);
 
-            // 2. Vẽ rễ cây (Bám xuống dưới)
-            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     // Rễ chéo phải
-            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); // Rễ chéo trái
-            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     // Rễ cắm thẳng
+            // Vẽ rễ (mọc từ 460 xuống đáy 500)
+            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     
+            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); 
+            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     
 
-            // 3. Sau khi cây mọc xong (tầm 1.5 giây), bắt đầu bung lá trái tim
             setTimeout(() => {
-                const totalHearts = 500; // Số lượng siêu dày để giống ảnh
+                const totalHearts = 500; 
                 for (let i = 0; i < totalHearts; i++) { 
                     const growDelay = 0.01 * i + (Math.random() * 0.4); 
                     setTimeout(createHeartLeaf, growDelay * 1000);
                 }
                 
-                // Pháo hoa tưng bừng khi trái tim cuối cùng hoàn thiện
                 setTimeout(() => {
                     for(let i=0; i<8; i++) {
                         setTimeout(() => createFirework(null, null, true), i * 350);
@@ -410,35 +394,25 @@
             const heart = document.createElement('div');
             heart.classList.add('heart-leaf');
             heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.zIndex = Math.floor(Math.random() * 100); // Lớp trước lớp sau ngẫu nhiên
+            heart.style.zIndex = Math.floor(Math.random() * 100); 
             
-            // Phân bổ toạ độ thành hình vòm cong hoàn hảo ở trên cùng
             const angle = Math.random() * Math.PI * 2;
             const radiusFactor = Math.sqrt(Math.random()); 
-            
-            // Tâm tán cây là (300, 170)
             const rx = 280 * radiusFactor; 
             const ry = 190 * radiusFactor;
             
             const pxX = 300 + Math.cos(angle) * rx; 
             let pxY = 170 + Math.sin(angle) * ry;
             
-            // Làm phẳng phần dưới của tán cây để lá không rụng quá thấp xuống thân
-            if (Math.sin(angle) > 0) {
-                pxY = 170 + Math.sin(angle) * ry * 0.5; 
-            }
+            if (Math.sin(angle) > 0) { pxY = 170 + Math.sin(angle) * ry * 0.5; }
             
-            // Dùng % để vị trí luôn tỉ lệ chuẩn dù co kéo màn hình đt
             heart.style.left = ((pxX / 600) * 100) + '%';
             heart.style.top = ((pxY / 500) * 100) + '%';
-
             heart.style.setProperty('--random-rot', (Math.random() * 80 - 40) + 'deg');
             heart.style.setProperty('--random-scale', Math.random() * 0.6 + 0.4); 
-
             heartCanopy.appendChild(heart);
         }
 
-        // --- PHÁO HOA TƯƠNG TÁC ---
         function createFirework(clientX, clientY, random = false) {
             const numParticles = 25;
             const startX = random ? (Math.random() * 80 + 10) + 'vw' : clientX + 'px';
@@ -450,13 +424,10 @@
                 firework.classList.add('firework');
                 firework.style.left = startX;
                 firework.style.top = startY;
-                
                 const tx = (Math.random() - 0.5) * 180;
                 const ty = (Math.random() - 0.5) * 180;
-                
                 firework.style.boxShadow = `${tx}px ${ty}px 2px ${color}`;
                 firework.style.animation = `explode 0.8s ease-out forwards`;
-                
                 fireworksContainer.appendChild(firework);
                 setTimeout(() => firework.remove(), 800);
             }
