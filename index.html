@@ -1,255 +1,437 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chúc Mừng 8/3 ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi Ngàn Lời Chúc 8/3 - Perfect Gift 🌸</title>
+    <style>
+        /* --- 1. FONTS & RESET --- */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500;600&display=swap');
 
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-<style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            width: 100vw;
+            overflow-x: hidden;
+            overflow-y: auto; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%); 
+            perspective: 1000px;
+            cursor: pointer;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        /* --- 2. HIỆU ỨNG NỀN: HOA & TRÁI TIM RƠI --- */
+        #falling-container, #fireworks-container {
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
 
-body{
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#fff0f5,#ffe4e1);
-font-family:'Montserrat',sans-serif;
-overflow:hidden;
-}
+        .falling-element {
+            position: absolute;
+            top: -50px;
+            animation: fall linear infinite;
+        }
 
-/* CARD */
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
 
-.card{
-background:white;
-padding:40px;
-border-radius:25px;
-box-shadow:0 20px 50px rgba(0,0,0,0.2);
-text-align:center;
-max-width:900px;
-width:90%;
-}
+        /* --- 3. PHÁO HOA --- */
+        .firework {
+            position: absolute;
+            width: 5px; height: 5px;
+            background: transparent;
+            border-radius: 50%;
+        }
 
-h1{
-font-family:'Dancing Script',cursive;
-font-size:3rem;
-color:#d81b60;
-margin-bottom:20px;
-}
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(35); opacity: 0; }
+        }
 
-/* MESSAGE */
+        /* --- 4. HƯỚNG DẪN --- */
+        #start-instruction {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            font-size: 1.5rem;
+            color: #d81b60;
+            font-weight: 600;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px 40px;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(216, 27, 96, 0.2);
+            animation: pulse 1.5s infinite;
+        }
 
-.message{
-font-size:1.1rem;
-line-height:1.7;
-color:#444;
-margin-bottom:30px;
-}
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+        }
 
-/* TREE */
+        /* --- 5. THE CARD (THIỆP MAIN) --- */
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(216, 27, 96, 0.15);
+            text-align: center;
+            max-width: 1000px;
+            width: 95%;
+            border: 2px solid rgba(255, 182, 193, 0.6);
+            z-index: 10;
+            position: relative;
+            
+            opacity: 0;
+            display: none;
+            transition: opacity 1s ease-out;
+        }
 
-#tree{
-position:relative;
-height:400px;
-display:flex;
-justify-content:center;
-align-items:flex-end;
-}
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d81b60;
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
 
-#trunk{
-width:50px;
-height:200px;
-background:linear-gradient(#5d4037,#3e2723);
-border-radius:20px;
-position:absolute;
-bottom:0;
-}
+        .wish-text {
+            color: #444;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-weight: 500;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-.branch{
-position:absolute;
-width:90px;
-height:12px;
-background:#5d4037;
-top:80px;
-border-radius:10px;
-}
+        .fade-in-line {
+            opacity: 0;
+            transform: translateY(20px);
+        }
 
-.left{
-left:-70px;
-transform:rotate(-30deg);
-}
+        .fade-in-line.active {
+            animation: fadeInLine 0.8s ease-out forwards;
+        }
 
-.right{
-right:-70px;
-transform:rotate(30deg);
-}
+        @keyframes fadeInLine {
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-/* HEART TREE */
+        /* --- 6. CÂY TÌNH YÊU SIÊU TO --- */
+        #tree {
+            position: relative;
+            width: 100%;
+            height: 450px; 
+            margin: 20px 0 40px 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            opacity: 0;
+            display: none; 
+            transition: opacity 1s ease-out;
+        }
 
-#canopy{
-position:absolute;
-bottom:120px;
-width:600px;
-height:300px;
-}
+        /* THIẾT KẾ LẠI THÂN CÂY CHÂN THỰC 3D */
+        #tree-trunk {
+            position: absolute;
+            bottom: 0;
+            width: 50px;
+            height: 180px;
+            /* Gradient cong 3D cho thân cây tròn trịa hơn */
+            background: linear-gradient(to right, #3a2318 0%, #68422d 25%, #8c5a3d 50%, #68422d 75%, #3a2318 100%);
+            border-radius: 12px 12px 0 0;
+            z-index: 2;
+            /* Đổ bóng khối và bóng đổ ra ngoài */
+            box-shadow: inset -8px 0 15px rgba(0,0,0,0.4), 10px 10px 20px rgba(0,0,0,0.15);
+        }
 
-.heart{
-position:absolute;
-width:20px;
-height:20px;
-transform:rotate(45deg);
-opacity:0;
-animation:bloom 1s forwards;
-}
+        /* Vân gỗ dọc trên thân cây */
+        #tree-trunk::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to right,
+                rgba(0,0,0,0.1) 0px,
+                rgba(0,0,0,0.1) 2px,
+                transparent 3px,
+                transparent 6px
+            );
+            border-radius: inherit;
+            pointer-events: none; /* Không làm ảnh hưởng click */
+        }
 
-.heart:before,
-.heart:after{
-content:"";
-position:absolute;
-width:20px;
-height:20px;
-background:inherit;
-border-radius:50%;
-}
+        /* Gốc rễ to bè bám chặt xuống đất */
+        #tree-trunk::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; 
+            left: -35px;
+            width: 120px; 
+            height: 35px;
+            /* Màu gốc cây tối dần về hai bên */
+            background: linear-gradient(to right, #28160e 0%, #4f3120 30%, #68422d 50%, #4f3120 70%, #28160e 100%);
+            border-radius: 50px 50px 10px 10px;
+            z-index: -1;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+        }
 
-.heart:before{
-top:-10px;
-left:0;
-}
+        #heart-canopy {
+            position: absolute;
+            bottom: 130px; 
+            width: 600px;
+            height: 350px;
+            z-index: 3;
+        }
 
-.heart:after{
-left:-10px;
-top:0;
-}
+        .heart-leaf {
+            position: absolute;
+            width: 22px; 
+            height: 22px;
+            opacity: 0;
+            animation: bloom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.15));
+        }
+        .heart-leaf::before, .heart-leaf::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: 50% 50% 0 0;
+            background: inherit;
+        }
 
-@keyframes bloom{
-0%{
-transform:scale(0) rotate(45deg);
-opacity:0;
-}
-100%{
-transform:scale(1) rotate(45deg);
-opacity:1;
-}
-}
+        .heart-leaf::before { left: 11px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .heart-leaf::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
 
-/* FLOAT HEART */
+        @keyframes bloom {
+            0% { transform: scale(0) rotate(var(--random-rot)); opacity: 0; }
+            100% { transform: scale(var(--random-scale)) rotate(var(--random-rot)); opacity: 1; }
+        }
 
-.float-heart{
-position:absolute;
-color:#ff4081;
-font-size:20px;
-animation:float 6s linear infinite;
-}
+        /* --- 7. MUSIC PLAYER CUSTOM --- */
+        .music-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50px;
+            border: 1px solid rgba(216, 27, 96, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.05);
+        }
 
-@keyframes float{
-0%{
-transform:translateY(0);
-opacity:1;
-}
-100%{
-transform:translateY(-800px);
-opacity:0;
-}
-}
+        .song-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1rem;
+            color: #d81b60;
+            font-weight: 600;
+            white-space: nowrap;
+        }
 
-</style>
+        audio {
+            width: 100%;
+            height: 35px;
+            outline: none;
+        }
+        
+        audio::-webkit-media-controls-panel { background-color: transparent; }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-timeline,
+        audio::-webkit-media-controls-volume-slider { color: #d81b60; }
+
+    </style>
 </head>
+<body id="body">
 
-<body>
+    <div id="start-instruction">👆 Chạm vào đây để mở thiệp 💝</div>
 
-<audio autoplay loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3b8c2e8e7a.mp3" type="audio/mpeg">
-</audio>
+    <div id="falling-container"></div>
+    <div id="fireworks-container"></div>
 
-<div class="card">
+    <div class="card" id="card">
+        
+        <h1>Chúc Mừng Ngày 8/3 - Chị Em Toả Sáng!</h1>
+        
+        <div class="wish-text">
+            <p class="fade-in-line" data-delay="0.5">Chúc mừng ngày 8/3 - chị em luôn toả sáng.</p>
+            <p class="fade-in-line" data-delay="1.2">Chúc các chị em rạng rỡ và ngập tràn quà và hoa.</p>
+            <p class="fade-in-line" data-delay="1.9">Chúc các chị em luôn xinh đẹp và hoàn hảo theo cách của riêng mình! ❤️</p>
+        </div>
 
-<h1>Happy Women's Day 8/3 ❤️</h1>
+        <div id="tree">
+            <div id="tree-trunk"></div>
+            <div id="heart-canopy"></div>
+        </div>
+        
+        <div class="music-wrapper fade-in-line" data-delay="3">
+            <div class="song-info">
+                <span>🎵</span>
+                <span>Perfect - Ed Sheeran</span>
+            </div>
+            <audio id="audio-player" controls loop>
+                <source src="Perfect.mp3" type="audio/mpeg">
+                Trình duyệt không hỗ trợ nghe nhạc.
+            </audio>
+        </div>
+        <p class="fade-in-line" data-delay="4" style="margin-top: 15px; color:#888; font-size: 0.9rem;">
+            Chạm vào tán cây để tạo thêm pháo hoa nhé!
+        </p>
+    </div>
 
-<div class="message">
-Chúc bạn một ngày 8/3 thật hạnh phúc.<br>
-Luôn xinh đẹp, vui vẻ và gặp nhiều may mắn.<br>
-Cảm ơn vì đã xuất hiện và làm thế giới trở nên dễ thương hơn 🌸
-</div>
+    <script>
+        const body = document.getElementById('body');
+        const card = document.getElementById('card');
+        const instruction = document.getElementById('start-instruction');
+        const audio = document.getElementById('audio-player');
+        const lines = document.querySelectorAll('.fade-in-line');
+        const fallingContainer = document.getElementById('falling-container');
+        const fireworksContainer = document.getElementById('fireworks-container');
+        const tree = document.getElementById('tree');
+        const heartCanopy = document.getElementById('heart-canopy');
 
-<div id="tree">
+        let isStarted = false;
 
-<div id="trunk">
-<div class="branch left"></div>
-<div class="branch right"></div>
-</div>
+        function startBlessing(e) {
+            // Không chặn click trên thẻ audio để người dùng có thể tua nhạc
+            if (e.target.tagName.toLowerCase() === 'audio') return; 
+            
+            if (!isStarted) {
+                isStarted = true;
+                instruction.style.display = 'none';
+                card.style.display = 'block';
+                setTimeout(() => card.style.opacity = '1', 50);
 
-<div id="canopy"></div>
+                audio.play().catch(e => console.log("Audio play blocked:", e));
 
-</div>
+                // Hiện lời chúc
+                lines.forEach((line) => {
+                    const delay = line.getAttribute('data-delay');
+                    setTimeout(() => line.classList.add('active'), delay * 1000);
+                });
 
-</div>
+                // Hiện cây sau khi đọc xong chữ (khoảng 3.5 giây)
+                setTimeout(() => {
+                    tree.style.display = 'flex';
+                    setTimeout(() => tree.style.opacity = '1', 50);
+                    startGrowingTree();
+                }, 3500);
+            } else if (e.target.closest('#tree')) {
+                // Click vào cây tạo pháo hoa
+                createFirework(e.clientX, e.clientY);
+            }
+        }
 
-<script>
+        body.addEventListener('click', startBlessing);
 
-const canopy=document.getElementById("canopy")
+        // --- HOA RƠI NỀN ---
+        const fallingItems = ['🌹', '❤️', '🌸', '💖', '✨', '🎀'];
+        setInterval(() => {
+            const element = document.createElement('div');
+            element.classList.add('falling-element');
+            element.innerText = fallingItems[Math.floor(Math.random() * fallingItems.length)];
+            element.style.left = Math.random() * 100 + 'vw';
+            element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+            element.style.animationDuration = Math.random() * 6 + 4 + 's';
+            element.style.opacity = Math.random() * 0.5 + 0.2;
+            fallingContainer.appendChild(element);
+            setTimeout(() => element.remove(), 9000);
+        }, 300); 
 
-const colors=[
-"#ffb6c1","#ff69b4","#ff4081",
-"#ffc0cb","#d81b60","#ff1744"
-]
+        // --- MỌC CÂY TRÁI TIM ELIP KHỔNG LỒ ---
+        const heartColors = [
+            '#ffb6c1', '#ffc0cb', '#d81b60', '#ff69b4', '#db7093', 
+            '#ff0000', '#ff4081', '#ab47bc', '#7b1fa2', '#ff9800', '#03a9f4'
+        ];
 
-function createHeart(){
+        function startGrowingTree() {
+            const totalHearts = 450; 
+            for (let i = 0; i < totalHearts; i++) { 
+                const growDelay = 0.015 * i + (Math.random() * 0.3); 
+                setTimeout(createHeartLeaf, growDelay * 1000);
+            }
+            
+            // Bắn pháo hoa ăn mừng khi cây mọc xong
+            setTimeout(() => {
+                for(let i=0; i<5; i++) {
+                    setTimeout(() => createFirework(null, null, true), i * 300);
+                }
+            }, totalHearts * 15 + 1000);
+        }
 
-const heart=document.createElement("div")
+        function createHeartLeaf() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-leaf');
+            heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
+            
+            // THUẬT TOÁN TẠO TÁN CÂY HÌNH ELIP (Ngang 600px, Cao 350px)
+            const angle = Math.random() * Math.PI * 2;
+            const radiusFactor = Math.sqrt(Math.random()); 
+            
+            const rx = 280 * radiusFactor; 
+            const ry = 160 * radiusFactor;
+            
+            const x = 300 + Math.cos(angle) * rx - 11; 
+            const y = 175 + Math.sin(angle) * ry - 11;
+            
+            const finalY = y - Math.abs(Math.cos(angle)) * 30; 
+            
+            heart.style.left = x + 'px';
+            heart.style.top = finalY + 'px';
 
-heart.className="heart"
+            heart.style.setProperty('--random-rot', (Math.random() * 90 - 45) + 'deg');
+            heart.style.setProperty('--random-scale', Math.random() * 0.7 + 0.6); 
 
-heart.style.background=colors[Math.floor(Math.random()*colors.length)]
+            heartCanopy.appendChild(heart);
+        }
 
-const x=Math.random()*580
-const y=Math.random()*280
+        // --- PHÁO HOA TƯƠNG TÁC ---
+        function createFirework(clientX, clientY, random = false) {
+            const numParticles = 20;
+            const startX = random ? (Math.random() * 80 + 10) + 'vw' : clientX + 'px';
+            const startY = random ? (Math.random() * 40 + 10) + 'vh' : clientY + 'px';
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
 
-heart.style.left=x+"px"
-heart.style.top=y+"px"
-
-canopy.appendChild(heart)
-
-}
-
-for(let i=0;i<350;i++){
-setTimeout(createHeart,i*20)
-}
-
-/* FLOAT HEART */
-
-function floating(){
-
-const heart=document.createElement("div")
-
-heart.className="float-heart"
-
-heart.innerHTML="❤️"
-
-heart.style.left=Math.random()*100+"%"
-
-heart.style.bottom="-20px"
-
-heart.style.fontSize=(20+Math.random()*20)+"px"
-
-document.body.appendChild(heart)
-
-setTimeout(()=>{
-heart.remove()
-},6000)
-
-}
-
-setInterval(floating,500)
-
-</script>
-
+            for (let i = 0; i < numParticles; i++) {
+                const firework = document.createElement('div');
+                firework.classList.add('firework');
+                firework.style.left = startX;
+                firework.style.top = startY;
+                
+                const tx = (Math.random() - 0.5) * 150;
+                const ty = (Math.random() - 0.5) * 150;
+                
+                firework.style.boxShadow = `${tx}px ${ty}px 2px ${color}`;
+                firework.style.animation = `explode 0.8s ease-out forwards`;
+                
+                fireworksContainer.appendChild(firework);
+                setTimeout(() => firework.remove(), 800);
+            }
+        }
+    </script>
 </body>
 </html>
