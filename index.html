@@ -1,178 +1,107 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Chúc Mừng 8/3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng Ngày 8/3 🌸</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@400;600&display=swap');
 
-<style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-body{
-margin:0;
-height:100vh;
-background:radial-gradient(circle,#ff4d6d,#1a0010);
-display:flex;
-justify-content:center;
-align-items:center;
-font-family:Arial;
-overflow:hidden;
-color:white;
-text-align:center;
-}
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #ffd3e0 0%, #fbc2eb 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-.box{
-z-index:10;
-}
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+            border: 2px solid #ffb6c1;
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-h1{
-font-size:55px;
-text-shadow:0 0 20px #ff4d6d;
-animation:float 3s infinite;
-}
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-@keyframes float{
-0%{transform:translateY(0);}
-50%{transform:translateY(-20px);}
-100%{transform:translateY(0);}
-}
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            color: #d81b60;
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+        }
 
-#text{
-font-size:22px;
-margin-top:20px;
-}
+        p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
 
-/* tim bay */
-.heart{
-position:absolute;
-animation:fly linear forwards;
-}
+        .music-player {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff0f5;
+            border-radius: 15px;
+            border: 1px dashed #ff69b4;
+        }
 
-@keyframes fly{
-0%{
-transform:translateY(100vh);
-opacity:1;
-}
-100%{
-transform:translateY(-10vh) rotate(360deg);
-opacity:0;
-}
-}
+        .music-title {
+            font-weight: 600;
+            color: #d81b60;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
 
-/* tim tỏa */
-.burst{
-position:absolute;
-left:50%;
-top:50%;
-animation:burst 2s linear forwards;
-}
+        /* Tùy chỉnh thanh audio */
+        audio {
+            width: 100%;
+            outline: none;
+        }
 
-@keyframes burst{
-0%{
-transform:translate(-50%,-50%) scale(1);
-opacity:1;
-}
-100%{
-transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.5);
-opacity:0;
-}
-}
+        .flower {
+            font-size: 3rem;
+            display: inline-block;
+            animation: rotateFlower 5s infinite linear;
+        }
 
-/* tim giữa */
-.centerHeart{
-position:absolute;
-font-size:80px;
-left:50%;
-top:50%;
-transform:translate(-50%,-50%);
-animation:pulse 1s infinite;
-}
-
-@keyframes pulse{
-0%{transform:translate(-50%,-50%) scale(1);}
-50%{transform:translate(-50%,-50%) scale(1.2);}
-100%{transform:translate(-50%,-50%) scale(1);}
-}
-
-</style>
+        @keyframes rotateFlower {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="box">
-<h1>🌹 Happy Women's Day 🌹</h1>
-<div id="text"></div>
-<p>From: Người bí mật ❤️</p>
-</div>
-
-<div class="centerHeart">💖</div>
-
-<!-- nhạc Perfect -->
-<audio autoplay loop>
-<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3d8f8a9e4f.mp3">
-</audio>
-
-<script>
-
-/* chữ chạy chậm */
-let message="Chúc bạn luôn xinh đẹp, hạnh phúc và thành công 💖";
-let i=0;
-
-function typing(){
-if(i<message.length){
-document.getElementById("text").innerHTML+=message.charAt(i);
-i++;
-setTimeout(typing,120);
-}
-}
-
-typing();
-
-/* tim bay */
-function createHeart(){
-
-let heart=document.createElement("div");
-
-heart.className="heart";
-heart.innerHTML="❤️";
-
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*20+20)+"px";
-heart.style.animationDuration=(Math.random()*3+3)+"s";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-heart.remove();
-},6000);
-
-}
-
-setInterval(createHeart,400);
-
-/* tim tỏa từ giữa */
-function burstHeart(){
-
-let heart=document.createElement("div");
-
-heart.className="burst";
-heart.innerHTML="💖";
-
-let x=(Math.random()-0.5)*400+"px";
-let y=(Math.random()-0.5)*400+"px";
-
-heart.style.setProperty("--x",x);
-heart.style.setProperty("--y",y);
-
-document.body.appendChild(heart);
-
-setTimeout(()=>{
-heart.remove();
-},2000);
-
-}
-
-setInterval(burstHeart,300);
-
-</script>
+    <div class="card">
+        <div class="flower">🌸</div>
+        <h1>Chúc Mừng 8/3!</h1>
+        <p>Chúc bạn có một ngày Quốc tế Phụ nữ thật nhiều niềm vui, luôn xinh đẹp và hạnh phúc. Đối với thế giới này, bạn luôn là một điều "Perfect" nhất! ❤️</p>
+        
+        <div class="music-player">
+            <div class="music-title">🎵 Đang phát: Perfect - Ed Sheeran</div>
+            <audio controls autoplay loop>
+                <source src="perfect.mp3" type="audio/mpeg">
+                Trình duyệt của bạn không hỗ trợ phát nhạc.
+            </audio>
+        </div>
+    </div>
 
 </body>
 </html>
