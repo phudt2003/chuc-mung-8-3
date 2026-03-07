@@ -19,18 +19,17 @@
             min-height: 100vh;
             width: 100vw;
             overflow-x: hidden;
-            overflow-y: auto; 
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 20px 0;
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%); 
+            padding: 40px 0;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
             cursor: pointer;
         }
 
-        /* --- 2. HIỆU ỨNG NỀN: HOA & TRÁI TIM RƠI --- */
+        /* --- 2. HIỆU ỨNG NỀN --- */
         #falling-container, #fireworks-container {
-            position: fixed; 
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
@@ -47,20 +46,7 @@
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
-        /* --- 3. PHÁO HOA --- */
-        .firework {
-            position: absolute;
-            width: 5px; height: 5px;
-            background: transparent;
-            border-radius: 50%;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(40); opacity: 0; }
-        }
-
-        /* --- 4. HƯỚNG DẪN --- */
+        /* --- 3. HƯỚNG DẪN --- */
         #start-instruction {
             position: fixed;
             top: 50%; left: 50%;
@@ -78,119 +64,92 @@
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* --- 5. THE CARD (THIỆP MAIN) --- */
+        /* --- 4. THE CARD (THIỆP CHÍNH) --- */
         .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            padding: 50px 40px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(15px);
+            padding: 40px;
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(216, 27, 96, 0.15);
             text-align: center;
-            max-width: 1000px;
+            max-width: 850px;
             width: 95%;
             border: 2px solid rgba(255, 182, 193, 0.6);
             z-index: 10;
-            position: relative;
+            display: none; 
+            flex-direction: column; 
+            align-items: center;
             opacity: 0;
-            display: none;
             transition: opacity 1s ease-out;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
             color: #d81b60;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
         .wish-text {
             color: #444;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 5px;
             font-weight: 500;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        .fade-in-line {
-            opacity: 0;
-            transform: translateY(20px);
-        }
+        .fade-in-line { opacity: 0; transform: translateY(20px); }
+        .fade-in-line.active { animation: fadeInLine 0.8s ease-out forwards; }
 
-        .fade-in-line.active {
-            animation: fadeInLine 0.8s ease-out forwards;
-        }
+        @keyframes fadeInLine { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes fadeInLine {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- 6. CÂY TÌNH YÊU FRACTAL (VẼ BẰNG JS & SVG) --- */
+        /* --- 5. CÂY VÀ RỄ (SVG) --- */
         #tree {
             position: relative;
             width: 100%;
-            max-width: 650px;
-            aspect-ratio: 6 / 5; /* Giữ form chuẩn kể cả trên điện thoại */
-            margin: 20px auto 40px auto;
+            max-width: 550px;
+            aspect-ratio: 1 / 1;
+            margin: 0 auto;
             opacity: 0;
-            display: none; /* Hiển thị qua JS */
             transition: opacity 1s ease-out;
+            z-index: 5;
         }
 
-        /* SVG để vẽ thân và cành cây */
         #tree-svg {
-            position: absolute;
-            top: 0; left: 0;
             width: 100%; height: 100%;
-            z-index: 2;
             overflow: visible;
         }
 
-        /* Hiệu ứng mọc cành cây */
         #tree-svg line {
-            stroke-dasharray: var(--path-length);
-            stroke-dashoffset: var(--path-length);
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: growLine 1.5s ease-out forwards;
         }
 
-        @keyframes growLine {
-            from { stroke-dashoffset: var(--path-length); }
-            to { stroke-dashoffset: 0; }
-        }
+        @keyframes growLine { to { stroke-dashoffset: 0; } }
 
-        /* Vùng chứa lá tim */
         #heart-canopy {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 3;
-            pointer-events: none; /* Tránh chặn click vào cây tạo pháo hoa */
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
         }
 
         .heart-leaf {
             position: absolute;
-            width: 22px; height: 22px;
-            margin-top: -11px; margin-left: -11px;
+            width: 18px; height: 18px;
             opacity: 0;
-            animation: bloom 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.25));
+            animation: bloom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
         
         .heart-leaf::before, .heart-leaf::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 22px; height: 22px;
-            border-radius: 50% 50% 0 0;
-            background: inherit;
+            content: ''; position: absolute; top: 0; width: 18px; height: 18px;
+            border-radius: 50% 50% 0 0; background: inherit;
         }
-        .heart-leaf::before { left: 11px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .heart-leaf::before { left: 9px; transform: rotate(-45deg); transform-origin: 0 100%; }
         .heart-leaf::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
 
         @keyframes bloom {
@@ -198,76 +157,70 @@
             100% { transform: scale(var(--random-scale)) rotate(var(--random-rot)); opacity: 1; }
         }
 
-        /* --- 7. MUSIC PLAYER --- */
+        /* --- 6. TRÌNH PHÁT NHẠC (ĐÃ FIX ĐÈ NHAU) --- */
+        .music-section {
+            width: 100%;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(216, 27, 96, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 20; /* Đảm bảo nằm trên cùng */
+        }
+
         .music-wrapper {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.6);
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 50px;
             border: 1px solid rgba(216, 27, 96, 0.3);
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: space-between;
             gap: 15px;
-            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.05);
+            box-shadow: 0 5px 15px rgba(216, 27, 96, 0.1);
         }
 
-        .song-info {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1rem;
-            color: #d81b60;
-            font-weight: 600;
-            white-space: nowrap;
-        }
+        .song-info { color: #d81b60; font-weight: 600; font-size: 0.9rem; }
+        audio { height: 35px; width: 220px; }
 
-        audio {
-            width: 100%; height: 35px; outline: none;
+        /* --- 7. PHÁO HOA --- */
+        .firework {
+            position: absolute; width: 4px; height: 4px;
+            border-radius: 50%; pointer-events: none;
         }
-        
-        audio::-webkit-media-controls-panel { background-color: transparent; }
-        audio::-webkit-media-controls-play-button,
-        audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-timeline,
-        audio::-webkit-media-controls-volume-slider { color: #d81b60; }
     </style>
 </head>
 <body id="body">
 
-    <div id="start-instruction">👆 Chạm vào đây để mở thiệp 💝</div>
+    <div id="start-instruction">👆 Chạm để mở thiệp 💝</div>
 
     <div id="falling-container"></div>
     <div id="fireworks-container"></div>
 
     <div class="card" id="card">
-        
-        <h1>Chúc Mừng Ngày 8/3 - Chị Em Toả Sáng!</h1>
+        <h1>Happy Women's Day!</h1>
         
         <div class="wish-text">
-            <p class="fade-in-line" data-delay="0.5">Chúc mừng ngày 8/3 - chị em luôn toả sáng.</p>
-            <p class="fade-in-line" data-delay="1.2">Chúc cùng chúng ta ống tuổi hồng vào nếp.</p>
-            <p class="fade-in-line" data-delay="1.9">Chúc các chị em rạng rỡ và hoàn hảo theo cách của riêng mình! ❤️</p>
+            <p class="fade-in-line" data-delay="0.5">Chúc mừng ngày Quốc tế Phụ nữ 8/3.</p>
+            <p class="fade-in-line" data-delay="1.2">Chúc các chị em luôn xinh đẹp, tự tin và tỏa sáng! ❤️</p>
         </div>
 
         <div id="tree">
-            <svg id="tree-svg" viewBox="0 0 600 500" preserveAspectRatio="xMidYMax meet"></svg>
+            <svg id="tree-svg" viewBox="0 0 600 600"></svg>
             <div id="heart-canopy"></div>
         </div>
         
-        <div class="music-wrapper fade-in-line" data-delay="3">
-            <div class="song-info">
-                <span>🎵</span>
-                <span>Perfect - Ed Sheeran</span>
+        <div class="music-section fade-in-line" data-delay="2.5">
+            <div class="music-wrapper">
+                <div class="song-info">🎵 Perfect - Ed Sheeran</div>
+                <audio id="audio-player" controls loop>
+                    <source src="Perfect.mp3" type="audio/mpeg">
+                </audio>
             </div>
-            <audio id="audio-player" controls loop>
-                <source src="Perfect.mp3" type="audio/mpeg">
-            </audio>
+            <p style="margin-top: 10px; color:#999; font-size: 0.8rem;">
+                Chạm vào cây để bắn pháo hoa nhé!
+            </p>
         </div>
-        <p class="fade-in-line" data-delay="4" style="margin-top: 15px; color:#888; font-size: 0.9rem;">
-            Chạm vào tán cây để tạo thêm pháo hoa nhé!
-        </p>
     </div>
 
     <script>
@@ -275,61 +228,40 @@
         const card = document.getElementById('card');
         const instruction = document.getElementById('start-instruction');
         const audio = document.getElementById('audio-player');
-        const lines = document.querySelectorAll('.fade-in-line');
-        const fallingContainer = document.getElementById('falling-container');
-        const fireworksContainer = document.getElementById('fireworks-container');
-        const tree = document.getElementById('tree');
         const treeSvg = document.getElementById('tree-svg');
         const heartCanopy = document.getElementById('heart-canopy');
+        const heartColors = ['#ff4d4d', '#ff80df', '#33ccff', '#ffcc00', '#cc33ff', '#ff1a75', '#0099ff', '#d81b60'];
 
         let isStarted = false;
 
-        function startBlessing(e) {
-            if (e.target.tagName.toLowerCase() === 'audio') return; 
+        body.addEventListener('click', (e) => {
+            // Tránh kích hoạt khi bấm vào các nút điều khiển nhạc
+            if (e.target.closest('.music-wrapper')) return;
             
             if (!isStarted) {
                 isStarted = true;
                 instruction.style.display = 'none';
-                card.style.display = 'block';
+                card.style.display = 'flex';
                 setTimeout(() => card.style.opacity = '1', 50);
+                
+                audio.play().catch(err => console.log("Auto-play cần tương tác người dùng"));
 
-                audio.play().catch(e => console.log("Audio play blocked:", e));
-
-                lines.forEach((line) => {
-                    const delay = line.getAttribute('data-delay');
-                    setTimeout(() => line.classList.add('active'), delay * 1000);
+                document.querySelectorAll('.fade-in-line').forEach(line => {
+                    setTimeout(() => line.classList.add('active'), line.dataset.delay * 1000);
                 });
 
-                // Chờ đọc chữ xong rồi mới hiện cây
+                // Hiện cây
                 setTimeout(() => {
-                    tree.style.display = 'block';
-                    setTimeout(() => tree.style.opacity = '1', 50);
-                    startGrowingTree();
-                }, 3500);
+                    document.getElementById('tree').style.opacity = '1';
+                    startFractalTree();
+                }, 1500);
             } else if (e.target.closest('#tree')) {
-                // Tương tác chạm cây ra pháo hoa
                 createFirework(e.clientX, e.clientY);
             }
-        }
+        });
 
-        body.addEventListener('click', startBlessing);
-
-        // --- HOA RƠI NỀN ---
-        const fallingItems = ['🌹', '❤️', '🌸', '💖', '✨', '🎀'];
-        setInterval(() => {
-            const element = document.createElement('div');
-            element.classList.add('falling-element');
-            element.innerText = fallingItems[Math.floor(Math.random() * fallingItems.length)];
-            element.style.left = Math.random() * 100 + 'vw';
-            element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-            element.style.animationDuration = Math.random() * 6 + 4 + 's';
-            element.style.opacity = Math.random() * 0.5 + 0.2;
-            fallingContainer.appendChild(element);
-            setTimeout(() => element.remove(), 9000);
-        }, 300); 
-
-        // --- THUẬT TOÁN VẼ CÂY FRACTAL BẰNG SVG ---
-        function drawBranch(x, y, len, angle, depth, branchWidth) {
+        // Hàm vẽ Fractal cho cả cành và rễ
+        function drawFractal(x, y, len, angle, depth, width, isRoot) {
             if (depth === 0) return;
 
             const x2 = x + len * Math.cos(angle);
@@ -340,126 +272,95 @@
             line.setAttribute('y1', y);
             line.setAttribute('x2', x2);
             line.setAttribute('y2', y2);
-            line.style.stroke = '#5c3a21'; // Màu vỏ cây nâu sẫm
-            line.style.strokeWidth = branchWidth;
-            line.style.strokeLinecap = 'round';
-
-            // Setup hiệu ứng vẽ
-            const pathLength = Math.sqrt((x2-x)**2 + (y2-y)**2);
-            line.style.setProperty('--path-length', pathLength);
             
-            // Cành lớn vươn ra trước, cành con vươn ra sau
-            const delay = (7 - depth) * 0.15; 
-            line.style.animation = `growLine 0.5s ease-out forwards ${delay}s`;
+            // Rễ màu đậm hơn, thân màu nâu gỗ
+            line.style.stroke = isRoot ? '#3d2b1f' : '#5c3a21';
+            line.style.strokeWidth = width;
+            line.style.strokeLinecap = 'round';
+            
+            // Trình tự mọc
+            const delay = isRoot ? 0.1 : (7 - depth) * 0.15;
+            line.style.animationDelay = `${delay}s`;
 
             treeSvg.appendChild(line);
 
-            // Tẽ 2 cành ngẫu nhiên
-            const angleOffset1 = 0.2 + Math.random() * 0.25;
-            const angleOffset2 = 0.2 + Math.random() * 0.25;
-            const lenFactor = 0.7 + Math.random() * 0.15;
-
-            drawBranch(x2, y2, len * lenFactor, angle - angleOffset1, depth - 1, branchWidth * 0.7);
-            drawBranch(x2, y2, len * lenFactor, angle + angleOffset2, depth - 1, branchWidth * 0.7);
-
-            // Thêm một cành mọc giữa (để cây trông sum suê hơn)
-            if (depth > 2 && Math.random() > 0.4) {
-                drawBranch(x2, y2, len * 0.6, angle + (Math.random()*0.2 - 0.1), depth - 1, branchWidth * 0.6);
+            // Nhánh tẽ
+            const branches = isRoot ? 2 : (Math.random() > 0.7 ? 3 : 2);
+            for (let i = 0; i < branches; i++) {
+                const newAngle = angle + (Math.random() - 0.5) * (isRoot ? 0.8 : 1.2);
+                const newLen = len * (0.65 + Math.random() * 0.2);
+                drawFractal(x2, y2, newLen, newAngle, depth - 1, width * 0.7, isRoot);
             }
         }
 
-        // --- BẢNG MÀU LÁ TIM ĐA DẠNG (NHƯ HÌNH MẪU) ---
-        const heartColors = [
-            '#ff4d4d', '#ff80df', '#33ccff', '#ffcc00', '#cc33ff', 
-            '#ff9933', '#ff1a75', '#0099ff', '#ffb366', '#d81b60', 
-            '#ff0066', '#9933ff', '#ff5050'
-        ];
-
-        function startGrowingTree() {
+        function startFractalTree() {
             treeSvg.innerHTML = '';
             heartCanopy.innerHTML = '';
 
-            // 1. Vẽ thân cây và cành (Hắt lên trên)
-            drawBranch(300, 460, 100, -Math.PI / 2, 7, 18);
+            // Vẽ Rễ (Hướng xuống - sâu và nét hơn)
+            drawFractal(300, 420, 45, Math.PI / 2.2, 4, 12, true);
+            drawFractal(300, 420, 45, Math.PI / 1.8, 4, 12, true);
+            
+            // Vẽ Thân & Cành (Hướng lên)
+            drawFractal(300, 420, 95, -Math.PI / 2, 7, 18, false);
 
-            // 2. Vẽ rễ cây (Bám xuống dưới)
-            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     // Rễ chéo phải
-            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); // Rễ chéo trái
-            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     // Rễ cắm thẳng
-
-            // 3. Sau khi cây mọc xong (tầm 1.5 giây), bắt đầu bung lá trái tim
+            // Sau khi cây mọc, bung lá
             setTimeout(() => {
-                const totalHearts = 500; // Số lượng siêu dày để giống ảnh
-                for (let i = 0; i < totalHearts; i++) { 
-                    const growDelay = 0.01 * i + (Math.random() * 0.4); 
-                    setTimeout(createHeartLeaf, growDelay * 1000);
+                for (let i = 0; i < 400; i++) {
+                    setTimeout(createHeartLeaf, i * 4);
                 }
-                
-                // Pháo hoa tưng bừng khi trái tim cuối cùng hoàn thiện
-                setTimeout(() => {
-                    for(let i=0; i<8; i++) {
-                        setTimeout(() => createFirework(null, null, true), i * 350);
-                    }
-                }, totalHearts * 10 + 1000);
-
-            }, 1500);
+            }, 1200);
         }
 
         function createHeartLeaf() {
             const heart = document.createElement('div');
             heart.classList.add('heart-leaf');
             heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.zIndex = Math.floor(Math.random() * 100); // Lớp trước lớp sau ngẫu nhiên
             
-            // Phân bổ toạ độ thành hình vòm cong hoàn hảo ở trên cùng
             const angle = Math.random() * Math.PI * 2;
-            const radiusFactor = Math.sqrt(Math.random()); 
-            
-            // Tâm tán cây là (300, 170)
-            const rx = 280 * radiusFactor; 
-            const ry = 190 * radiusFactor;
-            
-            const pxX = 300 + Math.cos(angle) * rx; 
-            let pxY = 170 + Math.sin(angle) * ry;
-            
-            // Làm phẳng phần dưới của tán cây để lá không rụng quá thấp xuống thân
-            if (Math.sin(angle) > 0) {
-                pxY = 170 + Math.sin(angle) * ry * 0.5; 
-            }
-            
-            // Dùng % để vị trí luôn tỉ lệ chuẩn dù co kéo màn hình đt
-            heart.style.left = ((pxX / 600) * 100) + '%';
-            heart.style.top = ((pxY / 500) * 100) + '%';
+            const radius = Math.sqrt(Math.random()) * 230;
+            const x = 300 + Math.cos(angle) * radius;
+            const y = 180 + Math.sin(angle) * radius * 0.8;
 
-            heart.style.setProperty('--random-rot', (Math.random() * 80 - 40) + 'deg');
-            heart.style.setProperty('--random-scale', Math.random() * 0.6 + 0.4); 
-
+            heart.style.left = (x / 600 * 100) + '%';
+            heart.style.top = (y / 600 * 100) + '%';
+            heart.style.setProperty('--random-rot', Math.random() * 360 + 'deg');
+            heart.style.setProperty('--random-scale', Math.random() * 0.5 + 0.5);
             heartCanopy.appendChild(heart);
         }
 
-        // --- PHÁO HOA TƯƠNG TÁC ---
-        function createFirework(clientX, clientY, random = false) {
-            const numParticles = 25;
-            const startX = random ? (Math.random() * 80 + 10) + 'vw' : clientX + 'px';
-            const startY = random ? (Math.random() * 40 + 10) + 'vh' : clientY + 'px';
+        function createFirework(x, y) {
             const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-
-            for (let i = 0; i < numParticles; i++) {
-                const firework = document.createElement('div');
-                firework.classList.add('firework');
-                firework.style.left = startX;
-                firework.style.top = startY;
+            for (let i = 0; i < 15; i++) {
+                const f = document.createElement('div');
+                f.classList.add('firework');
+                f.style.left = x + 'px'; f.style.top = y + 'px';
+                f.style.background = color;
+                f.style.boxShadow = `0 0 10px ${color}`;
                 
-                const tx = (Math.random() - 0.5) * 180;
-                const ty = (Math.random() - 0.5) * 180;
+                const tx = (Math.random() - 0.5) * 200;
+                const ty = (Math.random() - 0.5) * 200;
                 
-                firework.style.boxShadow = `${tx}px ${ty}px 2px ${color}`;
-                firework.style.animation = `explode 0.8s ease-out forwards`;
+                f.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+                ], { duration: 800, easing: 'ease-out' });
                 
-                fireworksContainer.appendChild(firework);
-                setTimeout(() => firework.remove(), 800);
+                document.body.appendChild(f);
+                setTimeout(() => f.remove(), 800);
             }
         }
+
+        // Hoa rơi nền
+        setInterval(() => {
+            const el = document.createElement('div');
+            el.className = 'falling-element';
+            el.innerText = ['🌸','✨','💖'][Math.floor(Math.random()*3)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.animationDuration = (Math.random() * 3 + 5) + 's';
+            document.getElementById('falling-container').appendChild(el);
+            setTimeout(() => el.remove(), 8000);
+        }, 400);
     </script>
 </body>
 </html>
