@@ -5,6 +5,7 @@
 <title>Chúc Mừng 8/3</title>
 
 <style>
+
 body{
 margin:0;
 height:100vh;
@@ -14,96 +15,84 @@ justify-content:center;
 align-items:center;
 font-family:Arial;
 overflow:hidden;
+perspective:1000px;
 color:white;
 text-align:center;
 }
 
+/* chữ 3D */
 h1{
-font-size:50px;
-text-shadow:0 0 10px #ff4d6d;
+font-size:60px;
+text-shadow:0 5px 10px rgba(0,0,0,0.2);
+animation:float 3s ease-in-out infinite;
 }
 
-#text{
-font-size:24px;
-margin-top:20px;
+@keyframes float{
+0%{transform:translateY(0) rotateX(0deg);}
+50%{transform:translateY(-20px) rotateX(10deg);}
+100%{transform:translateY(0) rotateX(0deg);}
 }
 
+p{
+font-size:22px;
+}
+
+/* trái tim 3D */
 .heart{
 position:absolute;
-color:red;
-animation:fall 5s linear infinite;
+font-size:24px;
+animation:heartMove linear forwards;
+transform:translateZ(0);
 }
 
-.flower{
-position:absolute;
-font-size:20px;
-animation:fall 7s linear infinite;
-}
-
-@keyframes fall{
+@keyframes heartMove{
 0%{
-transform:translateY(-10vh);
+transform:translateY(100vh) translateZ(0) rotate(0deg);
 opacity:1;
 }
 100%{
-transform:translateY(110vh);
+transform:translateY(-10vh) translateZ(200px) rotate(360deg);
 opacity:0;
 }
 }
+
 </style>
 </head>
 
 <body>
 
 <div>
-<h1>🌹 Happy Women's Day 8/3 🌹</h1>
-<div id="text"></div>
+<h1>🌹 Chúc Mừng 8/3 🌹</h1>
+<p>Chúc bạn luôn xinh đẹp, hạnh phúc và thành công 💖</p>
+<p>From: Người bí mật 😄</p>
 </div>
 
+<!-- nhạc nền -->
 <audio autoplay loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
 </audio>
 
 <script>
 
-let message="Chúc bạn luôn xinh đẹp, hạnh phúc và thành công 💖";
-let i=0;
-
-function typing(){
-if(i<message.length){
-document.getElementById("text").innerHTML+=message.charAt(i);
-i++;
-setTimeout(typing,60);
-}
-}
-
-typing();
-
 function createHeart(){
 let heart=document.createElement("div");
+
 heart.className="heart";
-heart.innerHTML="❤";
+heart.innerHTML="❤️";
+
 heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=Math.random()*20+10+"px";
-heart.style.animationDuration=Math.random()*3+3+"s";
+heart.style.animationDuration=(Math.random()*3+3)+"s";
+heart.style.fontSize=(Math.random()*20+20)+"px";
+
 document.body.appendChild(heart);
 
-setTimeout(()=>{heart.remove()},5000);
-}
+setTimeout(()=>{
+heart.remove();
+},6000);
 
-function createFlower(){
-let flower=document.createElement("div");
-flower.className="flower";
-flower.innerHTML="🌸";
-flower.style.left=Math.random()*100+"vw";
-flower.style.animationDuration=Math.random()*5+5+"s";
-document.body.appendChild(flower);
-
-setTimeout(()=>{flower.remove()},7000);
 }
 
 setInterval(createHeart,300);
-setInterval(createFlower,800);
 
 </script>
 
