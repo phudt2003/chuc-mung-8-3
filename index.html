@@ -28,39 +28,7 @@
             cursor: pointer;
         }
 
-        /* --- 2. HIỆU ỨNG NỀN: HOA & TRÁI TIM RƠI --- */
-        #falling-container, #fireworks-container {
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .falling-element {
-            position: absolute;
-            top: -50px;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-        }
-
-        /* --- 3. PHÁO HOA --- */
-        .firework {
-            position: absolute;
-            width: 5px; height: 5px;
-            background: transparent;
-            border-radius: 50%;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(40); opacity: 0; }
-        }
-
-        /* --- 4. HƯỚNG DẪN --- */
+        /* --- 2. HƯỚNG DẪN --- */
         #start-instruction {
             position: fixed;
             top: 50%; left: 50%;
@@ -82,7 +50,7 @@
             50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
         }
 
-        /* --- 5. THE CARD (THIỆP MAIN) --- */
+        /* --- 3. THE CARD (THIỆP MAIN) --- */
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
@@ -98,6 +66,13 @@
             opacity: 0;
             display: none;
             transition: opacity 1s ease-out;
+            overflow: hidden; /* QUAN TRỌNG: Giữ hiệu ứng không bị tràn ra ngoài viền bo tròn */
+        }
+
+        /* Nâng nội dung lên trên hiệu ứng nền */
+        h1, .wish-text, #tree, .music-wrapper, p {
+            position: relative;
+            z-index: 10;
         }
 
         h1 {
@@ -132,19 +107,50 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 6. CÂY TÌNH YÊU FRACTAL (VẼ BẰNG JS & SVG) --- */
+        /* --- 4. HIỆU ỨNG NỀN: HOA & TRÁI TIM RƠI (BÊN TRONG THIỆP) --- */
+        #falling-container, #fireworks-container {
+            position: absolute; /* Đổi thành absolute để dính theo thiệp */
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .falling-element {
+            position: absolute;
+            top: -50px;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(1200px) rotate(720deg); opacity: 0; }
+        }
+
+        /* --- 5. PHÁO HOA --- */
+        .firework {
+            position: absolute;
+            width: 5px; height: 5px;
+            background: transparent;
+            border-radius: 50%;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(40); opacity: 0; }
+        }
+
+        /* --- 6. CÂY TÌNH YÊU FRACTAL --- */
         #tree {
             position: relative;
             width: 100%;
             max-width: 650px;
-            aspect-ratio: 6 / 5; /* Giữ form chuẩn kể cả trên điện thoại */
+            aspect-ratio: 6 / 5; 
             margin: 20px auto 40px auto;
             opacity: 0;
-            display: none; /* Hiển thị qua JS */
+            display: none; 
             transition: opacity 1s ease-out;
         }
 
-        /* SVG để vẽ thân và cành cây */
         #tree-svg {
             position: absolute;
             top: 0; left: 0;
@@ -153,7 +159,6 @@
             overflow: visible;
         }
 
-        /* Hiệu ứng mọc cành cây */
         #tree-svg line {
             stroke-dasharray: var(--path-length);
             stroke-dashoffset: var(--path-length);
@@ -164,13 +169,12 @@
             to { stroke-dashoffset: 0; }
         }
 
-        /* Vùng chứa lá tim */
         #heart-canopy {
             position: absolute;
             top: 0; left: 0;
             width: 100%; height: 100%;
             z-index: 3;
-            pointer-events: none; /* Tránh chặn click vào cây tạo pháo hoa */
+            pointer-events: none; 
         }
 
         .heart-leaf {
@@ -238,10 +242,9 @@
 
     <div id="start-instruction">👆 Chạm vào đây để mở thiệp 💝</div>
 
-    <div id="falling-container"></div>
-    <div id="fireworks-container"></div>
-
     <div class="card" id="card">
+        <div id="falling-container"></div>
+        <div id="fireworks-container"></div>
         
         <h1>Chúc Mừng Ngày 8/3 - Chị Em Toả Sáng!</h1>
         
@@ -301,27 +304,27 @@
                     setTimeout(() => line.classList.add('active'), delay * 1000);
                 });
 
-                // Chờ đọc chữ xong rồi mới hiện cây
                 setTimeout(() => {
                     tree.style.display = 'block';
                     setTimeout(() => tree.style.opacity = '1', 50);
                     startGrowingTree();
                 }, 3500);
             } else if (e.target.closest('#tree')) {
-                // Tương tác chạm cây ra pháo hoa
                 createFirework(e.clientX, e.clientY);
             }
         }
 
         body.addEventListener('click', startBlessing);
 
-        // --- HOA RƠI NỀN ---
+        // --- HOA RƠI NỀN (BÊN TRONG THIỆP) ---
         const fallingItems = ['🌹', '❤️', '🌸', '💖', '✨', '🎀'];
         setInterval(() => {
             const element = document.createElement('div');
             element.classList.add('falling-element');
             element.innerText = fallingItems[Math.floor(Math.random() * fallingItems.length)];
-            element.style.left = Math.random() * 100 + 'vw';
+            
+            // Tính toán vị trí theo % của thiệp thay vì vw của màn hình
+            element.style.left = Math.random() * 100 + '%';
             element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
             element.style.animationDuration = Math.random() * 6 + 4 + 's';
             element.style.opacity = Math.random() * 0.5 + 0.2;
@@ -329,7 +332,7 @@
             setTimeout(() => element.remove(), 9000);
         }, 300); 
 
-        // --- THUẬT TOÁN VẼ CÂY FRACTAL BẰNG SVG ---
+        // --- THUẬT TOÁN VẼ CÂY ---
         function drawBranch(x, y, len, angle, depth, branchWidth) {
             if (depth === 0) return;
 
@@ -341,21 +344,18 @@
             line.setAttribute('y1', y);
             line.setAttribute('x2', x2);
             line.setAttribute('y2', y2);
-            line.style.stroke = '#5c3a21'; // Màu vỏ cây nâu sẫm
+            line.style.stroke = '#5c3a21'; 
             line.style.strokeWidth = branchWidth;
             line.style.strokeLinecap = 'round';
 
-            // Setup hiệu ứng vẽ
             const pathLength = Math.sqrt((x2-x)**2 + (y2-y)**2);
             line.style.setProperty('--path-length', pathLength);
             
-            // Cành lớn vươn ra trước, cành con vươn ra sau
             const delay = (7 - depth) * 0.15; 
             line.style.animation = `growLine 0.5s ease-out forwards ${delay}s`;
 
             treeSvg.appendChild(line);
 
-            // Tẽ 2 cành ngẫu nhiên
             const angleOffset1 = 0.2 + Math.random() * 0.25;
             const angleOffset2 = 0.2 + Math.random() * 0.25;
             const lenFactor = 0.7 + Math.random() * 0.15;
@@ -363,13 +363,11 @@
             drawBranch(x2, y2, len * lenFactor, angle - angleOffset1, depth - 1, branchWidth * 0.7);
             drawBranch(x2, y2, len * lenFactor, angle + angleOffset2, depth - 1, branchWidth * 0.7);
 
-            // Thêm một cành mọc giữa (để cây trông sum suê hơn)
             if (depth > 2 && Math.random() > 0.4) {
                 drawBranch(x2, y2, len * 0.6, angle + (Math.random()*0.2 - 0.1), depth - 1, branchWidth * 0.6);
             }
         }
 
-        // --- BẢNG MÀU LÁ TIM ĐA DẠNG (NHƯ HÌNH MẪU) ---
         const heartColors = [
             '#ff4d4d', '#ff80df', '#33ccff', '#ffcc00', '#cc33ff', 
             '#ff9933', '#ff1a75', '#0099ff', '#ffb366', '#d81b60', 
@@ -380,23 +378,18 @@
             treeSvg.innerHTML = '';
             heartCanopy.innerHTML = '';
 
-            // 1. Vẽ thân cây và cành (Hắt lên trên)
             drawBranch(300, 460, 100, -Math.PI / 2, 7, 18);
+            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     
+            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); 
+            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     
 
-            // 2. Vẽ rễ cây (Bám xuống dưới)
-            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     // Rễ chéo phải
-            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); // Rễ chéo trái
-            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     // Rễ cắm thẳng
-
-            // 3. Sau khi cây mọc xong (tầm 1.5 giây), bắt đầu bung lá trái tim
             setTimeout(() => {
-                const totalHearts = 500; // Số lượng siêu dày để giống ảnh
+                const totalHearts = 500; 
                 for (let i = 0; i < totalHearts; i++) { 
                     const growDelay = 0.01 * i + (Math.random() * 0.4); 
                     setTimeout(createHeartLeaf, growDelay * 1000);
                 }
                 
-                // Pháo hoa tưng bừng khi trái tim cuối cùng hoàn thiện
                 setTimeout(() => {
                     for(let i=0; i<8; i++) {
                         setTimeout(() => createFirework(null, null, true), i * 350);
@@ -410,25 +403,21 @@
             const heart = document.createElement('div');
             heart.classList.add('heart-leaf');
             heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
-            heart.style.zIndex = Math.floor(Math.random() * 100); // Lớp trước lớp sau ngẫu nhiên
+            heart.style.zIndex = Math.floor(Math.random() * 100); 
             
-            // Phân bổ toạ độ thành hình vòm cong hoàn hảo ở trên cùng
             const angle = Math.random() * Math.PI * 2;
             const radiusFactor = Math.sqrt(Math.random()); 
             
-            // Tâm tán cây là (300, 170)
             const rx = 280 * radiusFactor; 
             const ry = 190 * radiusFactor;
             
             const pxX = 300 + Math.cos(angle) * rx; 
             let pxY = 170 + Math.sin(angle) * ry;
             
-            // Làm phẳng phần dưới của tán cây để lá không rụng quá thấp xuống thân
             if (Math.sin(angle) > 0) {
                 pxY = 170 + Math.sin(angle) * ry * 0.5; 
             }
             
-            // Dùng % để vị trí luôn tỉ lệ chuẩn dù co kéo màn hình đt
             heart.style.left = ((pxX / 600) * 100) + '%';
             heart.style.top = ((pxY / 500) * 100) + '%';
 
@@ -438,11 +427,22 @@
             heartCanopy.appendChild(heart);
         }
 
-        // --- PHÁO HOA TƯƠNG TÁC ---
+        // --- PHÁO HOA TƯƠNG TÁC (TÍNH TOÁN LẠI VỊ TRÍ) ---
         function createFirework(clientX, clientY, random = false) {
             const numParticles = 25;
-            const startX = random ? (Math.random() * 80 + 10) + 'vw' : clientX + 'px';
-            const startY = random ? (Math.random() * 40 + 10) + 'vh' : clientY + 'px';
+            let startX, startY;
+            
+            // Tính toạ độ click chuột tương đối với khung thiệp
+            const cardRect = card.getBoundingClientRect();
+
+            if (random) {
+                startX = (Math.random() * 80 + 10) + '%';
+                startY = (Math.random() * 80 + 10) + '%';
+            } else {
+                startX = (clientX - cardRect.left) + 'px';
+                startY = (clientY - cardRect.top) + 'px';
+            }
+
             const color = heartColors[Math.floor(Math.random() * heartColors.length)];
 
             for (let i = 0; i < numParticles; i++) {
