@@ -19,7 +19,7 @@ color:white;
 text-align:center;
 }
 
-/* hộp chữ */
+/* nội dung */
 .box{
 z-index:10;
 }
@@ -41,7 +41,7 @@ font-size:24px;
 margin-top:20px;
 }
 
-/* tim bay */
+/* tim bay lên */
 .heart{
 position:absolute;
 animation:fly linear forwards;
@@ -49,13 +49,49 @@ animation:fly linear forwards;
 
 @keyframes fly{
 0%{
-transform:translateY(100vh) scale(1);
+transform:translateY(100vh);
 opacity:1;
 }
 100%{
-transform:translateY(-10vh) scale(1.5) rotate(360deg);
+transform:translateY(-10vh) rotate(360deg);
 opacity:0;
 }
+}
+
+/* tim tỏa ra */
+.burst{
+position:absolute;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+animation:burst 2s linear forwards;
+}
+
+@keyframes burst{
+0%{
+transform:translate(-50%,-50%) scale(1);
+opacity:1;
+}
+100%{
+transform:translate(calc(-50% + var(--x)),calc(-50% + var(--y))) scale(1.5);
+opacity:0;
+}
+}
+
+/* tim lớn giữa */
+.centerHeart{
+position:absolute;
+font-size:80px;
+left:50%;
+top:50%;
+transform:translate(-50%,-50%);
+animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+0%{transform:translate(-50%,-50%) scale(1);}
+50%{transform:translate(-50%,-50%) scale(1.2);}
+100%{transform:translate(-50%,-50%) scale(1);}
 }
 
 </style>
@@ -69,18 +105,20 @@ opacity:0;
 <p>From: Người bí mật ❤️</p>
 </div>
 
+<div class="centerHeart">💖</div>
+
 <audio id="music" loop>
 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
 </audio>
 
 <script>
 
-/* bật nhạc khi click */
+/* bật nhạc */
 document.body.addEventListener("click",function(){
 document.getElementById("music").play();
 });
 
-/* chữ hiện từng chữ */
+/* chữ hiện dần */
 let message="Chúc bạn luôn xinh đẹp, hạnh phúc và thành công 💖";
 let i=0;
 
@@ -94,11 +132,10 @@ setTimeout(typing,70);
 
 typing();
 
-/* tạo tim bay */
+/* tim bay lên */
 function createHeart(){
 
 let heart=document.createElement("div");
-
 heart.className="heart";
 heart.innerHTML="❤️";
 
@@ -114,7 +151,31 @@ heart.remove();
 
 }
 
-setInterval(createHeart,300);
+setInterval(createHeart,400);
+
+/* tim tỏa ra từ giữa */
+function burstHeart(){
+
+let heart=document.createElement("div");
+
+heart.className="burst";
+heart.innerHTML="💖";
+
+let x=(Math.random()-0.5)*400+"px";
+let y=(Math.random()-0.5)*400+"px";
+
+heart.style.setProperty("--x",x);
+heart.style.setProperty("--y",y);
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},2000);
+
+}
+
+setInterval(burstHeart,300);
 
 </script>
 
