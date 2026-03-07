@@ -19,7 +19,6 @@ color:white;
 text-align:center;
 }
 
-/* nội dung */
 .box{
 z-index:10;
 }
@@ -39,21 +38,6 @@ animation:float 3s infinite;
 #text{
 font-size:22px;
 margin-top:20px;
-}
-
-/* chữ hướng dẫn */
-#start{
-position:absolute;
-bottom:40px;
-font-size:14px;
-opacity:0.8;
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-0%{opacity:0.2;}
-50%{opacity:1;}
-100%{opacity:0.2;}
 }
 
 /* tim bay */
@@ -121,9 +105,8 @@ animation:pulse 1s infinite;
 
 <div class="centerHeart">💖</div>
 
-<div id="start">Nhấp vào màn hình trong 5s để bắt đầu</div>
-
-<audio id="music" loop>
+<!-- nhạc Perfect -->
+<audio autoplay loop>
 <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3d8f8a9e4f.mp3">
 </audio>
 
@@ -141,16 +124,7 @@ setTimeout(typing,120);
 }
 }
 
-/* bật nhạc khi click */
-document.body.addEventListener("click",function(){
-
-document.getElementById("music").play();
-
-document.getElementById("start").style.display="none";
-
 typing();
-
-});
 
 /* tim bay */
 function createHeart(){
