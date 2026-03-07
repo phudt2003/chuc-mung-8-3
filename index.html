@@ -136,21 +136,22 @@
         #tree {
             position: relative;
             width: 100%;
-            max-width: 650px;
-            aspect-ratio: 6 / 5; /* Giữ form chuẩn kể cả trên điện thoại */
-            margin: 20px auto 40px auto;
+            max-width: 550px;
+            height: 420px;
+            margin: 40px auto;
             opacity: 0;
-            display: none; /* Hiển thị qua JS */
+            display: none;
             transition: opacity 1s ease-out;
         }
 
         /* SVG để vẽ thân và cành cây */
-        #tree-svg {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 2;
-            overflow: visible;
+        #tree-svg{
+            position:absolute;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index:2;
         }
 
         /* Hiệu ứng mọc cành cây */
@@ -165,12 +166,13 @@
         }
 
         /* Vùng chứa lá tim */
-        #heart-canopy {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 3;
-            pointer-events: none; /* Tránh chặn click vào cây tạo pháo hoa */
+        #heart-canopy{
+            position:absolute;
+            top:0;
+            left:0;
+            width:100%;
+            height:100%;
+            z-index:3;
         }
 
         .heart-leaf {
@@ -247,8 +249,10 @@
         
         <div class="wish-text">
             <p class="fade-in-line" data-delay="0.5">Chúc mừng ngày 8/3 - chị em luôn toả sáng.</p>
-            <p class="fade-in-line" data-delay="1.2">Chúc cùng chúng ta ống tuổi hồng vào nếp.</p>
+            <p class="fade-in-line" data-delay="1.2">Có một người luôn âm thầm chúc chị em hạnh phúc mỗi ngày.</p>
+            <p class="fade-in-line" data-delay="1.2">Chỉ mong mỗi ngày của chị em đều rực rỡ như những trái tim đang nở trên cây này.</p>
             <p class="fade-in-line" data-delay="1.9">Chúc các chị em rạng rỡ và hoàn hảo theo cách của riêng mình! ❤️</p>
+            
         </div>
 
         <div id="tree">
@@ -416,11 +420,11 @@
             const radiusFactor = Math.sqrt(Math.random()); 
             
             // Tâm tán cây là (300, 170)
-            const rx = 280 * radiusFactor; 
-            const ry = 190 * radiusFactor;
+            const rx = 230 * radiusFactor;
+            const ry = 140 * radiusFactor;
             
-            const pxX = 300 + Math.cos(angle) * rx; 
-            let pxY = 170 + Math.sin(angle) * ry;
+            const pxX = 300 + Math.cos(angle) * rx;
+            let pxY = 200 + Math.sin(angle) * ry;
             
             // Làm phẳng phần dưới của tán cây để lá không rụng quá thấp xuống thân
             if (Math.sin(angle) > 0) {
