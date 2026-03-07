@@ -68,11 +68,16 @@ opacity:0;
 </div>
 
 <!-- nhạc nền -->
-<audio autoplay loop>
+<audio id="music" loop>
 <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
 </audio>
 
 <script>
+document.body.addEventListener("click", function(){
+    const music = document.getElementById("music");
+    music.play();
+});
+</script>
 
 function createHeart(){
 let heart=document.createElement("div");
