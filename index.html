@@ -135,7 +135,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- 6. CÂY TÌNH YÊU (TRÁI TIM MỌC TỪ TỪ) --- */
+        /* --- 6. CÂY TÌNH YÊU (SỬA LẠI ĐỂ TRÁI TIM DÍNH TRÊN CÂY) --- */
         #tree {
             position: relative;
             width: 100%;
@@ -165,38 +165,41 @@
             bottom: 80px;
             width: 180px;
             height: 180px;
-            /* Đây là khu vực mọc trái tim, không có màu nền */
+            z-index: 3;
         }
 
-        /* Trái tim nhỏ (được sinh ra bằng JS) */
+        /* Trái tim nhỏ */
         .heart-leaf {
             position: absolute;
-            width: 15px;
-            height: 15px;
+            width: 14px;
+            height: 14px;
             opacity: 0;
-            animation: growAndFloat 2.5s ease-out forwards;
+            /* Dùng hiệu ứng nảy mọc lá (bloom) thay vì bay đi */
+            animation: bloom 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         .heart-leaf::before, .heart-leaf::after {
             content: '';
             position: absolute;
             top: 0;
-            width: 15px;
-            height: 15px;
+            width: 14px;
+            height: 14px;
             border-radius: 50% 50% 0 0;
             background: inherit; /* Lấy màu từ div cha */
         }
 
-        .heart-leaf::before { left: 7.5px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .heart-leaf::before { left: 7px; transform: rotate(-45deg); transform-origin: 0 100%; }
         .heart-leaf::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
 
-        @keyframes growAndFloat {
-            0% { transform: scale(0) translateY(0); opacity: 0; }
-            30% { transform: scale(1) translateY(-10px); opacity: 1; }
-            100% { 
-                /* Bay lên và tan biến nhẹ */
-                transform: scale(1.1) translateY(-100px) translateX(var(--random-x)); 
+        /* Animation mọc lá và giữ nguyên */
+        @keyframes bloom {
+            0% { 
+                transform: scale(0) rotate(var(--random-rot)); 
                 opacity: 0; 
+            }
+            100% { 
+                transform: scale(var(--random-scale)) rotate(var(--random-rot)); 
+                opacity: 1; 
             }
         }
 
@@ -298,7 +301,7 @@
             card.style.display = 'block';
             setTimeout(() => card.style.opacity = '1', 50);
 
-            // 2. Phát nhạc (nếu có tương tác, trình duyệt sẽ cho phép)
+            // 2. Phát nhạc
             audio.play().catch(e => console.log("Audio play blocked by browser:", e));
 
             // 3. Chạy hiệu ứng pháo hoa
@@ -340,17 +343,16 @@
             fallingContainer.appendChild(element);
             setTimeout(() => element.remove(), 8000);
         }
-        setInterval(createFallingItem, 250); // Rơi thưa hơn để không rối mắt khi mọc cây
+        setInterval(createFallingItem, 250); 
 
 
         // --- HIỆU ỨNG CÂY TÌNH YÊU MỌC TRÁI TIM ---
-        const heartColors = ['#ffb6c1', '#ffc0cb', '#d81b60', '#ff69b4', '#db7093', '#ff0000'];
+        const heartColors = ['#ffb6c1', '#ffc0cb', '#d81b60', '#ff69b4', '#db7093', '#ff0000', '#ff4081', '#ab47bc'];
 
         function startGrowingTree() {
-            // Mọc khoảng 120 trái tim nhỏ để tạo tán cây
-            for (let i = 0; i < 120; i++) {
-                // Tạo một độ trễ mọc tăng dần để cây mọc "từ từ"
-                const growDelay = 0.05 * i + (Math.random() * 0.5); 
+            // Tăng lên 200 trái tim để tán cây rậm rạp hơn
+            for (let i = 0; i < 200; i++) { 
+                const growDelay = 0.03 * i + (Math.random() * 0.2); 
                 setTimeout(createHeartLeaf, growDelay * 1000);
             }
         }
@@ -362,22 +364,22 @@
             // Chọn màu ngẫu nhiên từ danh sách
             heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
             
-            // Vị trí mọc ngẫu nhiên trong tán cây (hình tròn/trái tim)
+            // Vị trí mọc ngẫu nhiên trong tán cây (hình tròn)
             const angle = Math.random() * Math.PI * 2;
-            const radius = Math.sqrt(Math.random()) * 80; // Tán rộng tối đa 80px
-            const x = 90 + Math.cos(angle) * radius - 7.5; // Căn giữa
-            const y = 90 + Math.sin(angle) * radius - 7.5; // Căn giữa
+            const radius = Math.sqrt(Math.random()) * 85; 
+            const x = 90 + Math.cos(angle) * radius - 7; // 90 là tâm khu vực 180x180
+            const y = 90 + Math.sin(angle) * radius - 7;
             
             heart.style.left = x + 'px';
             heart.style.bottom = y + 'px';
 
-            // Biến ngẫu nhiên cho hướng bay
-            heart.style.setProperty('--random-x', (Math.random() * 40 - 20) + 'px');
+            // Tạo độ xoay và kích thước ngẫu nhiên để tán cây tự nhiên hơn
+            heart.style.setProperty('--random-rot', (Math.random() * 80 - 40) + 'deg');
+            heart.style.setProperty('--random-scale', Math.random() * 0.5 + 0.7);
 
             heartCanopy.appendChild(heart);
             
-            // Xóa sau khi hoàn thành animation bay
-            setTimeout(() => heart.remove(), 2500); 
+            // LƯU Ý: Đã xóa lệnh tự hủy (heart.remove()) ở đây để trái tim dính lại trên cây
         }
 
 
@@ -386,11 +388,9 @@
             const firework = document.createElement('div');
             firework.classList.add('firework');
             
-            // Vị trí bắn ngẫu nhiên ở phần trên màn hình
             firework.style.left = Math.random() * 100 + 'vw';
             firework.style.top = Math.random() * 50 + 'vh';
             
-            // Màu ngẫu nhiên
             const color = heartColors[Math.floor(Math.random() * heartColors.length)];
             firework.style.boxShadow = `
                 ${(Math.random() - 0.5) * 5}px ${(Math.random() - 0.5) * 5}px 1px ${color},
@@ -398,7 +398,7 @@
             `;
 
             firework.style.animation = `explode 1s ease-out forwards`;
-            fireworksContainer.appendChild(firework);
+            fireworkworksContainer.appendChild(firework);
             setTimeout(() => firework.remove(), 1000);
         }
 
