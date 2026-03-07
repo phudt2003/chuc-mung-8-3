@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Ngàn Lời Chúc 8/3 - Cây Tình Yêu 🌸</title>
+    <title>Gửi Ngàn Lời Chúc 8/3 - Perfect Gift 🌸</title>
     <style>
         /* --- 1. FONTS & RESET --- */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
@@ -18,424 +18,389 @@
             font-family: 'Montserrat', sans-serif;
             height: 100vh;
             width: 100vw;
-            overflow: hidden; /* Khóa cuộn màn hình để hiệu ứng rơi đẹp nhất */
+            overflow: hidden; /* Khóa cuộn màn hình */
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Nền gradient hoàng hôn tím hồng lãng mạn */
+            /* Nền gradient hồng lãng mạn */
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            perspective: 1000px; /* Tạo hiệu ứng 3D nhẹ cho thẻ */
+            perspective: 1000px;
+            cursor: pointer; /* Hiển thị bàn tay để báo hiệu có thể click */
         }
 
-        /* --- 2. HIỆU ỨNG nỀN: HOA & TRÁI TIM RƠI (JS sinh ra) --- */
-        .falling-element {
-            position: absolute;
-            top: -50px;
-            pointer-events: none; /* Không cản trở việc click vào thẻ */
-            animation: fall linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(0) rotate(0deg) translateX(0);
-                opacity: 1;
-            }
-            100% {
-                /* Rơi xuống quá màn hình, xoay ngẫu nhiên, đưa sang ngang nhẹ */
-                transform: translateY(110vh) rotate(720deg) translateX(50px);
-                opacity: 0;
-            }
-        }
-
-        /* --- 3. THE CARD (THIỆP MAIN) --- */
-        .card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px); /* Hiệu ứng kính mờ modern */
-            padding: 50px 40px;
-            border-radius: 25px;
-            box-shadow: 0 15px 45px rgba(216, 27, 96, 0.2);
-            text-align: center;
-            max-width: 480px;
-            width: 90%;
-            border: 2px solid rgba(255, 182, 193, 0.5);
-            z-index: 10; /* Nổi lên trên nền hoa rơi */
-            
-            /* Hiệu ứng xuất hiện lúc tải trang */
-            opacity: 0;
-            transform: translateY(30px) scale(0.9);
-            animation: cardEntrance 1.2s ease-out forwards;
-            animation-delay: 0.5s;
-        }
-
-        @keyframes cardEntrance {
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        /* --- 4. CẤU TRÚC CÂY SỰ SỐNG (DỰA TRÊN ẢNH) --- */
-        #heart-tree-container {
-            margin: 20px auto;
-            position: relative;
-            width: 320px;
-            height: 380px;
-            z-index: 10;
-        }
-
-        #heart-tree-trunk {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 25px;
-            height: 120px;
-            background-color: #8B4513; /* Màu nâu thân cây */
-            border-radius: 5px 5px 0 0;
-        }
-
-        #heart-tree-canopy {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 320px;
-            height: 280px;
-            position: relative;
-        }
-
-        /* Vùng elip của tán cây */
-        #heart-tree-canopy-area {
+        /* --- 2. HIỆU ỨNG nỀN: HOA & TRÁI TIM RƠI --- */
+        #falling-container, #fireworks-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: visible; /* Để pháo hoa nổ ra ngoài */
+            pointer-events: none; /* Không cản trở click */
+            z-index: 1;
         }
 
-        /* Trái tim (css shape) */
-        .heart-leaf {
+        .falling-element {
             position: absolute;
-            width: 12px;
-            height: 12px;
-            opacity: 0; /* Bắt đầu ẩn */
-            transform: scale(0);
-            animation: bloom 1s ease-out forwards;
+            top: -50px;
+            animation: fall linear infinite;
         }
 
-        @keyframes bloom {
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
 
-        .heart-leaf::before,
-        .heart-leaf::after {
-            content: '';
+        /* --- 3. PHÁO HOA --- */
+        .firework {
             position: absolute;
-            top: 0;
-            width: 12px;
-            height: 12px;
-            border-radius: 50% 50% 0 0;
-            background: inherit;
-        }
-        
-        .heart-leaf::before {
-            left: -6px;
-        }
-        
-        .heart-leaf::after {
-            left: 6px;
-            transform: rotate(-90deg);
-        }
-
-        /* Pháo hoa nổ từ tán cây */
-        .firework-particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
+            width: 4px;
+            height: 4px;
+            background: transparent;
             border-radius: 50%;
-            opacity: 1;
-            pointer-events: none;
-            animation: explode 0.8s ease-out forwards;
         }
 
         @keyframes explode {
-            to {
-                transform: translate(calc(var(--dx) * 1px), calc(var(--dy) * 1px)) scale(2);
-                opacity: 0;
-            }
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(30); opacity: 0; }
         }
 
-        /* Điểm chạm sáng (để thể hiện người đang chỉ tay) */
-        #touch-spark {
+        /* --- 4. HƯỚNG DẪN ĐẦU TRANG --- */
+        #start-instruction {
             position: absolute;
-            width: 15px;
-            height: 15px;
-            background-color: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #ffb6c1, 0 0 20px #ffb6c1;
-            opacity: 0;
-            pointer-events: none;
+            top: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 1.2rem;
+            color: #d81b60;
+            font-weight: 600;
             z-index: 100;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: pulse 1.5s infinite;
         }
 
-        /* --- 5. CÁC PHẦN TỬ TRONG THIỆP --- */
-        .icon-header {
-            font-size: 3.5rem;
-            margin-bottom: 10px;
-            display: inline-block;
-            animation: heartBeat 1.5s infinite;
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.03); }
         }
 
-        @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.15); }
+        /* --- 5. THE CARD (THIỆP MAIN) --- */
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(216, 27, 96, 0.15);
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+            border: 2px solid rgba(255, 182, 193, 0.4);
+            z-index: 10;
+            
+            /* Ban đầu ẩn đi, chỉ hiện khi click */
+            opacity: 0;
+            display: none;
+            transition: opacity 1s ease-out;
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            color: #d81b60; /* Màu hồng đậm */
-            font-size: 3.2rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            color: #d81b60;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Hiệu ứng chữ xuất hiện dần từng đoạn */
         .wish-text {
             color: #444;
-            font-size: 1.15rem;
-            line-height: 1.8;
-            margin-bottom: 35px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            margin-bottom: 30px;
             font-weight: 300;
-            text-align: left;
         }
 
         .fade-in-line {
             opacity: 0;
             transform: translateY(15px);
+        }
+
+        /* Khi class active được thêm vào, chữ sẽ hiện ra */
+        .fade-in-line.active {
             animation: fadeInLine 0.8s ease-out forwards;
         }
 
         @keyframes fadeInLine {
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- 6. CÂY TÌNH YÊU (TRÁI TIM MỌC TỪ TỪ) --- */
+        #tree {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            /* Ban đầu ẩn cây */
+            opacity: 0;
+            display: none; 
+            transition: opacity 1s ease-out;
+        }
+
+        #tree-trunk {
+            position: absolute;
+            bottom: 0;
+            width: 15px;
+            height: 100px;
+            background-color: #8B4513; /* Màu nâu thân cây */
+            border-radius: 10px 10px 0 0;
+            z-index: 2;
+        }
+
+        #heart-canopy {
+            position: absolute;
+            bottom: 80px;
+            width: 180px;
+            height: 180px;
+            /* Đây là khu vực mọc trái tim, không có màu nền */
+        }
+
+        /* Trái tim nhỏ (được sinh ra bằng JS) */
+        .heart-leaf {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            opacity: 0;
+            animation: growAndFloat 2.5s ease-out forwards;
+        }
+
+        .heart-leaf::before, .heart-leaf::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            border-radius: 50% 50% 0 0;
+            background: inherit; /* Lấy màu từ div cha */
+        }
+
+        .heart-leaf::before { left: 7.5px; transform: rotate(-45deg); transform-origin: 0 100%; }
+        .heart-leaf::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+
+        @keyframes growAndFloat {
+            0% { transform: scale(0) translateY(0); opacity: 0; }
+            30% { transform: scale(1) translateY(-10px); opacity: 1; }
+            100% { 
+                /* Bay lên và tan biến nhẹ */
+                transform: scale(1.1) translateY(-100px) translateX(var(--random-x)); 
+                opacity: 0; 
             }
         }
 
-        /* --- 6. MUSIC PLAYER CUSTOME --- */
+        /* --- 7. MUSIC PLAYER --- */
         .music-wrapper {
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 10px;
+            padding: 15px;
             background: rgba(216, 27, 96, 0.05);
             border-radius: 15px;
             border: 1px dashed #ffb6c1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .song-info {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #888;
             font-weight: 600;
         }
         
         .song-title {
             color: #d81b60;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
-        /* Custom lại nút audio cho đẹp hơn */
         audio {
             width: 100%;
-            height: 35px;
+            height: 30px;
             outline: none;
         }
         
-        /* Tùy chỉnh màu thanh audio trên Chrome/Safari */
-        audio::-webkit-media-controls-panel {
-            background-color: #fff0f5;
-        }
+        audio::-webkit-media-controls-panel { background-color: #fff0f5; }
         audio::-webkit-media-controls-play-button,
         audio::-webkit-media-controls-current-time-display,
-        audio::-webkit-media-controls-time-remaining-display,
         audio::-webkit-media-controls-timeline,
-        audio::-webkit-media-controls-volume-slider {
-            color: #d81b60;
-        }
+        audio::-webkit-media-controls-volume-slider { color: #d81b60; }
 
     </style>
 </head>
-<body onload="finalCelebration()">
+<body id="body">
+
+    <div id="start-instruction">Chạm vào màn hình để thắp sáng cây tình yêu!</div>
 
     <div id="falling-container"></div>
-    <div id="touch-spark"></div>
+    <div id="fireworks-container"></div>
 
-    <div class="card">
-        <div class="icon-header">💝</div>
+    <div class="card" id="card">
+        <div class="icon-header" style="font-size: 3rem; margin-bottom: 5px;">💝</div>
         
-        <h1 class="fade-in-line" style="animation-delay: 1.0s;">Gửi Ngàn Lời Chúc 8/3</h1>
+        <h1>Happy March 8th</h1>
         
-        <div id="heart-tree-container">
-            <div id="heart-tree-trunk"></div>
-            <div id="heart-tree-canopy">
-                <div id="heart-tree-canopy-area"></div>
-            </div>
+        <div class="wish-text">
+            <p class="fade-in-line" data-delay="1">Gửi đến những bông hoa xinh đẹp nhất,</p>
+            <p class="fade-in-line" data-delay="1.8">Chúc chị em một ngày 8/3 rạng rỡ, ngập tràn quà và hoa,</p>
+            <p class="fade-in-line" data-delay="2.6">luôn tự tin, yêu đời và gặt hái được nhiều thành công.</p>
+            <p class="fade-in-line" data-delay="3.5">Các chị em luôn là những điều tuyệt vời nhất! ✨❤️</p>
+        </div>
+
+        <div id="tree">
+            <div id="tree-trunk"></div>
+            <div id="heart-canopy"></div>
         </div>
         
-        <div class="wish-text fade-in-line" style="animation-delay: 6.0s;">
-            <p>Chúc mừng ngày 8/3 - chị em lo cho toả sáng</p>
-            <p>Chúc cùng chúng ta ông tuổi trong một vào nền</p>
-            <p>Chúc các chị em ngày càng nở và và trên và với tất cả</p>
-            <p>Chúc các chị em luôn rạng rỡ và hoàn hảo theo cách của riêng mình! 💖</p>
-        </div>
-        
-        <div class="music-wrapper fade-in-line" style="animation-delay: 7.0s;">
+        <div class="music-wrapper fade-in-line" data-delay="5.5">
             <div class="song-info">
                 <span>🎵 Now Playing:</span>
                 <span class="song-title">Perfect - Ed Sheeran</span>
             </div>
-            <audio controls autoplay loop>
+            <audio id="audio-player" controls loop>
                 <source src="Perfect.mp3" type="audio/mpeg">
                 Trình duyệt không hỗ trợ nghe nhạc.
             </audio>
         </div>
-        
-        <p class="song-info fade-in-line" style="animation-delay: 8.0s; margin-top: 10px;">Chạm vào màn hình để thắp sáng cây tình yêu!</p>
     </div>
 
     <script>
-        // --- 1. JAVASCRIPT TẠO HIỆU ỨNG nỀN RƠI ---
-        const container = document.getElementById('falling-container');
-        const items = ['🌹', '❤️', '🌸', '💖', '✨'];
+        // --- CÁC BIẾN CHÍNH ---
+        const body = document.getElementById('body');
+        const card = document.getElementById('card');
+        const instruction = document.getElementById('start-instruction');
+        const audio = document.getElementById('audio-player');
+        const lines = document.querySelectorAll('.fade-in-line');
+        const fallingContainer = document.getElementById('falling-container');
+        const fireworksContainer = document.getElementById('fireworks-container');
+        const tree = document.getElementById('tree');
+        const heartCanopy = document.getElementById('heart-canopy');
+
+        let isStarted = false;
+
+        // --- HÀM KHỞI TẠO SAU KHI CLICK ---
+        function startBlessing() {
+            if (isStarted) return;
+            isStarted = true;
+
+            // 1. Ẩn hướng dẫn và hiện thiệp
+            instruction.style.display = 'none';
+            card.style.display = 'block';
+            setTimeout(() => card.style.opacity = '1', 50);
+
+            // 2. Phát nhạc (nếu có tương tác, trình duyệt sẽ cho phép)
+            audio.play().catch(e => console.log("Audio play blocked by browser:", e));
+
+            // 3. Chạy hiệu ứng pháo hoa
+            setInterval(createFirework, 400);
+
+            // 4. Hiện lời chúc theo thời gian
+            lines.forEach((line) => {
+                const delay = line.getAttribute('data-delay');
+                setTimeout(() => {
+                    line.classList.add('active');
+                }, delay * 1000);
+            });
+
+            // 5. Hiện cây tình yêu sau khi lời chúc kết thúc (khoảng 4.5 giây)
+            setTimeout(() => {
+                tree.style.display = 'flex';
+                setTimeout(() => tree.style.opacity = '1', 50);
+                startGrowingTree(); // Bắt đầu mọc trái tim
+            }, 4800);
+        }
+
+        // Lắng nghe sự kiện click trên toàn body
+        body.addEventListener('click', startBlessing);
+
+
+        // --- HIỆU ỨNG HOA & TRÁI TIM RƠI (Chạy sẵn) ---
+        const fallingItems = ['🌹', '❤️', '🌸', '💖', '✨'];
         
         function createFallingItem() {
+            if (isStarted) return; // Chỉ rơi khi chưa click
+
             const element = document.createElement('div');
             element.classList.add('falling-element');
-            element.innerText = items[Math.floor(Math.random() * items.length)];
+            element.innerText = fallingItems[Math.floor(Math.random() * fallingItems.length)];
             element.style.left = Math.random() * 100 + 'vw';
             element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
             element.style.animationDuration = Math.random() * 5 + 3 + 's';
-            element.style.opacity = Math.random() * 0.5 + 0.5;
-            container.appendChild(element);
-            setTimeout(() => { element.remove(); }, 8000);
+            element.style.opacity = Math.random() * 0.5 + 0.3;
+            fallingContainer.appendChild(element);
+            setTimeout(() => element.remove(), 8000);
         }
-        setInterval(createFallingItem, 200);
+        setInterval(createFallingItem, 250); // Rơi thưa hơn để không rối mắt khi mọc cây
 
-        // --- 2. JAVASCRIPT TẠO CÂY TÌNH YÊU VÀ HIỆU ỨNG MỌC ---
-        const treeCanopyArea = document.getElementById('heart-tree-canopy-area');
-        const spark = document.getElementById('touch-spark');
-        
-        // Cấu hình cây (dựa trên elip tán cây trong ảnh)
-        const totalHearts = 200; // Tổng số trái tim để lấp đầy tán
-        const elipseCenterX = 160; 
-        const elipseCenterY = 140;
-        const elipseRx = 150; // Bán kính elip ngang
-        const elipseRy = 130; // Bán kính elip dọc
-        
-        const heartColors = ['#d81b60', '#ffb6c1', '#f06292', '#ff4081', '#7b1fa2', '#fbc02d', '#0288d1'];
 
-        // Hàm tạo một trái tim mọc
-        function createHeart(x, y, color, delay) {
+        // --- HIỆU ỨNG CÂY TÌNH YÊU MỌC TRÁI TIM ---
+        const heartColors = ['#ffb6c1', '#ffc0cb', '#d81b60', '#ff69b4', '#db7093', '#ff0000'];
+
+        function startGrowingTree() {
+            // Mọc khoảng 120 trái tim nhỏ để tạo tán cây
+            for (let i = 0; i < 120; i++) {
+                // Tạo một độ trễ mọc tăng dần để cây mọc "từ từ"
+                const growDelay = 0.05 * i + (Math.random() * 0.5); 
+                setTimeout(createHeartLeaf, growDelay * 1000);
+            }
+        }
+
+        function createHeartLeaf() {
             const heart = document.createElement('div');
             heart.classList.add('heart-leaf');
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            heart.style.background = color;
-            // Xoay nhẹ ngẫu nhiên để trông hữu cơ
-            heart.style.transform += ` rotate(${Math.random() * 40 - 20}deg)`;
-            heart.style.animationDelay = delay + 's';
             
-            treeCanopyArea.appendChild(heart);
+            // Chọn màu ngẫu nhiên từ danh sách
+            heart.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
+            
+            // Vị trí mọc ngẫu nhiên trong tán cây (hình tròn/trái tim)
+            const angle = Math.random() * Math.PI * 2;
+            const radius = Math.sqrt(Math.random()) * 80; // Tán rộng tối đa 80px
+            const x = 90 + Math.cos(angle) * radius - 7.5; // Căn giữa
+            const y = 90 + Math.sin(angle) * radius - 7.5; // Căn giữa
+            
+            heart.style.left = x + 'px';
+            heart.style.bottom = y + 'px';
+
+            // Biến ngẫu nhiên cho hướng bay
+            heart.style.setProperty('--random-x', (Math.random() * 40 - 20) + 'px');
+
+            heartCanopy.appendChild(heart);
+            
+            // Xóa sau khi hoàn thành animation bay
+            setTimeout(() => heart.remove(), 2500); 
         }
 
-        // Tạo cây mọc tuần tự
-        function growTree() {
-            let delayCount = 0;
-            const delayStep = 0.05; // Khoảng cách giữa các trái tim mọc
 
-            for(let i=0; i<totalHearts; i++) {
-                // Lấy vị trí ngẫu nhiên TRONG phạm vi elip tán cây
-                // Sử dụng công thức parametric của elip với một chút ngẫu nhiên về bán kính để mọc đều
-                const angle = Math.random() * Math.PI * 2;
-                const rFactor = 0.5 + Math.random() * 0.5; // Tập trung mọc từ trong ra ngoài (rFactor <= 1)
-                const x = elipseCenterX + elipseRx * rFactor * Math.cos(angle) - 6; // -6 để căn giữa shape 12x12
-                const y = elipseCenterY + elipseRy * rFactor * Math.sin(angle) - 6;
-                
-                const color = heartColors[Math.floor(Math.random() * heartColors.length)];
-                
-                createHeart(x, y, color, delayCount);
-                delayCount += delayStep;
-            }
+        // --- HIỆU ỨNG PHÁO HOA ---
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            
+            // Vị trí bắn ngẫu nhiên ở phần trên màn hình
+            firework.style.left = Math.random() * 100 + 'vw';
+            firework.style.top = Math.random() * 50 + 'vh';
+            
+            // Màu ngẫu nhiên
+            const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+            firework.style.boxShadow = `
+                ${(Math.random() - 0.5) * 5}px ${(Math.random() - 0.5) * 5}px 1px ${color},
+                ${(Math.random() - 0.5) * 5}px ${(Math.random() - 0.5) * 5}px 1px ${color}
+            `;
+
+            firework.style.animation = `explode 1s ease-out forwards`;
+            fireworksContainer.appendChild(firework);
+            setTimeout(() => firework.remove(), 1000);
         }
-
-        // --- 3. JAVASCRIPT TẠO HIỆU ỨNG PHÁO HOA ---
-        // Màu sắc pháo hoa tương ứng với trái tim
-        const fireworkColors = ['#fbc02d', '#0288d1', '#d81b60', '#fdfbfb', '#fbc02d'];
-
-        function fireworkPop(x, y) {
-            const numParticles = 30; // Số hạt nổ
-            for(let i=0; i<numParticles; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('firework-particle');
-                
-                // Vị trí nổ ban đầu
-                particle.style.left = x + 'px';
-                particle.style.top = y + 'px';
-                
-                // Màu sắc ngẫu nhiên cho pháo hoa
-                particle.style.background = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
-                
-                // Hướng nổ và tốc độ ngẫu nhiên
-                const dx = Math.random() * 200 - 100;
-                const dy = Math.random() * 200 - 100;
-                particle.style.setProperty('--dx', dx);
-                particle.style.setProperty('--dy', dy);
-                
-                treeCanopyArea.appendChild(particle);
-                setTimeout(() => { particle.remove(); }, 800);
-            }
-        }
-
-        // Hiệu ứng pháo hoa chúc mừng sau khi cây đã mọc xong (nổ cao hơn trong tán cây)
-        function finalCelebration() {
-            growTree();
-            // Nổ cao hơn một chút trong tán elip
-            setTimeout(() => fireworkPop(160, 50), 3000); 
-            setTimeout(() => fireworkPop(250, 100), 3500); 
-            setTimeout(() => fireworkPop(100, 150), 4000); 
-            setTimeout(() => fireworkPop(200, 180), 4500);
-        }
-
-        // --- 4. TƯƠNG TÁC (CHẠM VÀO MÀN HÌNH ĐỂ NỔ THÊM) ---
-        document.body.addEventListener('click', (e) => {
-            const cardRect = treeCanopyArea.getBoundingClientRect();
-            // Kiểm tra nếu nhấp chuột nằm trong khu vực tán cây
-            if (
-                e.clientX >= cardRect.left &&
-                e.clientX <= cardRect.right &&
-                e.clientY >= cardRect.top &&
-                e.clientY <= cardRect.bottom
-            ) {
-                // Hiển thị điểm chạm sáng
-                spark.style.left = e.clientX - 7 + 'px';
-                spark.style.top = e.clientY - 7 + 'px';
-                spark.style.opacity = 1;
-                setTimeout(() => spark.style.opacity = 0, 500);
-                
-                // Nổ pháo hoa tại điểm chạm
-                // Chuyển đổi tọa độ chuột sang tọa độ tương đối của tán cây
-                const relativeX = e.clientX - cardRect.left;
-                const relativeY = e.clientY - cardRect.top;
-                fireworkPop(relativeX, relativeY);
-            }
-        });
 
     </script>
 
