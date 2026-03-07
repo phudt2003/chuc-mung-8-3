@@ -54,7 +54,7 @@
         .card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
-            padding: 50px 40px;
+            padding: 50px 40px 30px; /* Chỉnh lại padding dưới một chút */
             border-radius: 30px;
             box-shadow: 0 20px 60px rgba(216, 27, 96, 0.15);
             text-align: center;
@@ -66,11 +66,11 @@
             opacity: 0;
             display: none;
             transition: opacity 1s ease-out;
-            overflow: hidden; /* QUAN TRỌNG: Giữ hiệu ứng không bị tràn ra ngoài viền bo tròn */
+            overflow: hidden; 
         }
 
         /* Nâng nội dung lên trên hiệu ứng nền */
-        h1, .wish-text, #tree, .music-wrapper, p {
+        h1, .wish-text, #tree, .music-wrapper, p, .designer {
             position: relative;
             z-index: 10;
         }
@@ -107,9 +107,19 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* --- TÊN NGƯỜI THIẾT KẾ --- */
+        .designer {
+            margin-top: 30px;
+            font-size: 0.85rem;
+            color: #a0a0a0;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
         /* --- 4. HIỆU ỨNG NỀN: HOA & TRÁI TIM RƠI (BÊN TRONG THIỆP) --- */
         #falling-container, #fireworks-container {
-            position: absolute; /* Đổi thành absolute để dính theo thiệp */
+            position: absolute; 
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
             z-index: 1;
@@ -269,9 +279,12 @@
                 <source src="Perfect.mp3" type="audio/mpeg">
             </audio>
         </div>
+        
         <p class="fade-in-line" data-delay="4" style="margin-top: 15px; color:#888; font-size: 0.9rem;">
             Chạm vào tán cây để tạo thêm pháo hoa nhé!
         </p>
+
+        <p class="fade-in-line designer" data-delay="4.5">Design by Dương Trọng Phú</p>
     </div>
 
     <script>
@@ -323,7 +336,6 @@
             element.classList.add('falling-element');
             element.innerText = fallingItems[Math.floor(Math.random() * fallingItems.length)];
             
-            // Tính toán vị trí theo % của thiệp thay vì vw của màn hình
             element.style.left = Math.random() * 100 + '%';
             element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
             element.style.animationDuration = Math.random() * 6 + 4 + 's';
@@ -427,12 +439,11 @@
             heartCanopy.appendChild(heart);
         }
 
-        // --- PHÁO HOA TƯƠNG TÁC (TÍNH TOÁN LẠI VỊ TRÍ) ---
+        // --- PHÁO HOA TƯƠNG TÁC ---
         function createFirework(clientX, clientY, random = false) {
             const numParticles = 25;
             let startX, startY;
             
-            // Tính toạ độ click chuột tương đối với khung thiệp
             const cardRect = card.getBoundingClientRect();
 
             if (random) {
