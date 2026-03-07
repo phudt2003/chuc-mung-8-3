@@ -386,4 +386,58 @@
                 particle.classList.add('firework-particle');
                 
                 // Vị trí nổ ban đầu
-                particle.style.left = x
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                // Màu sắc ngẫu nhiên cho pháo hoa
+                particle.style.background = fireworkColors[Math.floor(Math.random() * fireworkColors.length)];
+                
+                // Hướng nổ và tốc độ ngẫu nhiên
+                const dx = Math.random() * 200 - 100;
+                const dy = Math.random() * 200 - 100;
+                particle.style.setProperty('--dx', dx);
+                particle.style.setProperty('--dy', dy);
+                
+                treeCanopyArea.appendChild(particle);
+                setTimeout(() => { particle.remove(); }, 800);
+            }
+        }
+
+        // Hiệu ứng pháo hoa chúc mừng sau khi cây đã mọc xong (nổ cao hơn trong tán cây)
+        function finalCelebration() {
+            growTree();
+            // Nổ cao hơn một chút trong tán elip
+            setTimeout(() => fireworkPop(160, 50), 3000); 
+            setTimeout(() => fireworkPop(250, 100), 3500); 
+            setTimeout(() => fireworkPop(100, 150), 4000); 
+            setTimeout(() => fireworkPop(200, 180), 4500);
+        }
+
+        // --- 4. TƯƠNG TÁC (CHẠM VÀO MÀN HÌNH ĐỂ NỔ THÊM) ---
+        document.body.addEventListener('click', (e) => {
+            const cardRect = treeCanopyArea.getBoundingClientRect();
+            // Kiểm tra nếu nhấp chuột nằm trong khu vực tán cây
+            if (
+                e.clientX >= cardRect.left &&
+                e.clientX <= cardRect.right &&
+                e.clientY >= cardRect.top &&
+                e.clientY <= cardRect.bottom
+            ) {
+                // Hiển thị điểm chạm sáng
+                spark.style.left = e.clientX - 7 + 'px';
+                spark.style.top = e.clientY - 7 + 'px';
+                spark.style.opacity = 1;
+                setTimeout(() => spark.style.opacity = 0, 500);
+                
+                // Nổ pháo hoa tại điểm chạm
+                // Chuyển đổi tọa độ chuột sang tọa độ tương đối của tán cây
+                const relativeX = e.clientX - cardRect.left;
+                const relativeY = e.clientY - cardRect.top;
+                fireworkPop(relativeX, relativeY);
+            }
+        });
+
+    </script>
+
+</body>
+</html>
