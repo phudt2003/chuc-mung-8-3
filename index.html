@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gửi Ngàn Lời Chúc 8/3 - Perfect Gift 🌸</title>
+    <title>Gửi Ngàn Lời Chúc 8/3 - Cây Tình Yêu 🌸</title>
     <style>
         /* --- 1. FONTS & RESET --- */
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
@@ -75,7 +75,115 @@
             }
         }
 
-        /* --- 4. CÁC PHẦN TỬ TRONG THIỆP --- */
+        /* --- 4. CẤU TRÚC CÂY SỰ SỐNG (DỰA TRÊN ẢNH) --- */
+        #heart-tree-container {
+            margin: 20px auto;
+            position: relative;
+            width: 320px;
+            height: 380px;
+            z-index: 10;
+        }
+
+        #heart-tree-trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 120px;
+            background-color: #8B4513; /* Màu nâu thân cây */
+            border-radius: 5px 5px 0 0;
+        }
+
+        #heart-tree-canopy {
+            position: absolute;
+            bottom: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 320px;
+            height: 280px;
+            position: relative;
+        }
+
+        /* Vùng elip của tán cây */
+        #heart-tree-canopy-area {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: visible; /* Để pháo hoa nổ ra ngoài */
+        }
+
+        /* Trái tim (css shape) */
+        .heart-leaf {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            opacity: 0; /* Bắt đầu ẩn */
+            transform: scale(0);
+            animation: bloom 1s ease-out forwards;
+        }
+
+        @keyframes bloom {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .heart-leaf::before,
+        .heart-leaf::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50% 50% 0 0;
+            background: inherit;
+        }
+        
+        .heart-leaf::before {
+            left: -6px;
+        }
+        
+        .heart-leaf::after {
+            left: 6px;
+            transform: rotate(-90deg);
+        }
+
+        /* Pháo hoa nổ từ tán cây */
+        .firework-particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            opacity: 1;
+            pointer-events: none;
+            animation: explode 0.8s ease-out forwards;
+        }
+
+        @keyframes explode {
+            to {
+                transform: translate(calc(var(--dx) * 1px), calc(var(--dy) * 1px)) scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Điểm chạm sáng (để thể hiện người đang chỉ tay) */
+        #touch-spark {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #ffb6c1, 0 0 20px #ffb6c1;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        /* --- 5. CÁC PHẦN TỬ TRONG THIỆP --- */
         .icon-header {
             font-size: 3.5rem;
             margin-bottom: 10px;
@@ -103,6 +211,7 @@
             line-height: 1.8;
             margin-bottom: 35px;
             font-weight: 300;
+            text-align: left;
         }
 
         .fade-in-line {
@@ -118,7 +227,7 @@
             }
         }
 
-        /* --- 5. MUSIC PLAYER CUSTOME DƠN GIẢN --- */
+        /* --- 6. MUSIC PLAYER CUSTOME --- */
         .music-wrapper {
             margin-top: 20px;
             padding: 20px;
@@ -163,23 +272,31 @@
 
     </style>
 </head>
-<body>
+<body onload="finalCelebration()">
 
     <div id="falling-container"></div>
+    <div id="touch-spark"></div>
 
     <div class="card">
         <div class="icon-header">💝</div>
         
-        <h1>Happy March 8th</h1>
+        <h1 class="fade-in-line" style="animation-delay: 1.0s;">Gửi Ngàn Lời Chúc 8/3</h1>
         
-        <div class="wish-text">
-            <p class="fade-in-line" style="animation-delay: 1.5s;">Gửi đến những bông hoa xinh đẹp nhất,</p>
-            <p class="fade-in-line" style="animation-delay: 2.3s;">Chúc chị em một ngày 8/3 rạng rỡ, ngập tràn quà và hoa,</p>
-            <p class="fade-in-line" style="animation-delay: 3.1s;">luôn tự tin, yêu đời và gặt hái được nhiều thành công.</p>
-            <p class="fade-in-line" style="animation-delay: 4.0s;">Các chị em luôn là những điều tuyệt vời nhất! ✨❤️</p>
+        <div id="heart-tree-container">
+            <div id="heart-tree-trunk"></div>
+            <div id="heart-tree-canopy">
+                <div id="heart-tree-canopy-area"></div>
+            </div>
         </div>
         
-        <div class="music-wrapper fade-in-line" style="animation-delay: 5.0s;">
+        <div class="wish-text fade-in-line" style="animation-delay: 6.0s;">
+            <p>Chúc mừng ngày 8/3 - chị em lo cho toả sáng</p>
+            <p>Chúc cùng chúng ta ông tuổi trong một vào nền</p>
+            <p>Chúc các chị em ngày càng nở và và trên và với tất cả</p>
+            <p>Chúc các chị em luôn rạng rỡ và hoàn hảo theo cách của riêng mình! 💖</p>
+        </div>
+        
+        <div class="music-wrapper fade-in-line" style="animation-delay: 7.0s;">
             <div class="song-info">
                 <span>🎵 Now Playing:</span>
                 <span class="song-title">Perfect - Ed Sheeran</span>
@@ -189,50 +306,84 @@
                 Trình duyệt không hỗ trợ nghe nhạc.
             </audio>
         </div>
+        
+        <p class="song-info fade-in-line" style="animation-delay: 8.0s; margin-top: 10px;">Chạm vào màn hình để thắp sáng cây tình yêu!</p>
     </div>
 
     <script>
-        // --- JAVASCRIPT TẠO HIỆU ỨNG nỀN RƠI ---
+        // --- 1. JAVASCRIPT TẠO HIỆU ỨNG nỀN RƠI ---
         const container = document.getElementById('falling-container');
-        
-        // Danh sách các emoji sẽ rơi (Hoa hồng, Trái tim, Hoa đào)
         const items = ['🌹', '❤️', '🌸', '💖', '✨'];
         
         function createFallingItem() {
             const element = document.createElement('div');
             element.classList.add('falling-element');
-            
-            // Lấy ngẫu nhiên một icon
             element.innerText = items[Math.floor(Math.random() * items.length)];
-            
-            // Vị trí ngang ngẫu nhiên (0vw đến 100vw)
             element.style.left = Math.random() * 100 + 'vw';
-            
-            // Kích thước ngẫu nhiên (1rem đến 2.5rem)
             element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
-            
-            // Tốc độ rơi ngẫu nhiên (3 giây đến 8 giây)
             element.style.animationDuration = Math.random() * 5 + 3 + 's';
-            
-            // Độ mờ ngẫu nhiên để tạo chiều sâu
             element.style.opacity = Math.random() * 0.5 + 0.5;
-
             container.appendChild(element);
-
-            // Tự xóa phần tử sau khi rơi xong để tránh nặng máy
-            setTimeout(() => {
-                element.remove();
-            }, 8000);
+            setTimeout(() => { element.remove(); }, 8000);
         }
-
-        // Tạo phần tử mới mỗi 200ms (5 phần tử/giây)
         setInterval(createFallingItem, 200);
-        
-        // Tạo sẵn một ít lúc mới vào
-        for(let i=0; i<10; i++) {
-            setTimeout(createFallingItem, i * 100);
-        }
-    </script>
 
-</body>
-</html>
+        // --- 2. JAVASCRIPT TẠO CÂY TÌNH YÊU VÀ HIỆU ỨNG MỌC ---
+        const treeCanopyArea = document.getElementById('heart-tree-canopy-area');
+        const spark = document.getElementById('touch-spark');
+        
+        // Cấu hình cây (dựa trên elip tán cây trong ảnh)
+        const totalHearts = 200; // Tổng số trái tim để lấp đầy tán
+        const elipseCenterX = 160; 
+        const elipseCenterY = 140;
+        const elipseRx = 150; // Bán kính elip ngang
+        const elipseRy = 130; // Bán kính elip dọc
+        
+        const heartColors = ['#d81b60', '#ffb6c1', '#f06292', '#ff4081', '#7b1fa2', '#fbc02d', '#0288d1'];
+
+        // Hàm tạo một trái tim mọc
+        function createHeart(x, y, color, delay) {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-leaf');
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.background = color;
+            // Xoay nhẹ ngẫu nhiên để trông hữu cơ
+            heart.style.transform += ` rotate(${Math.random() * 40 - 20}deg)`;
+            heart.style.animationDelay = delay + 's';
+            
+            treeCanopyArea.appendChild(heart);
+        }
+
+        // Tạo cây mọc tuần tự
+        function growTree() {
+            let delayCount = 0;
+            const delayStep = 0.05; // Khoảng cách giữa các trái tim mọc
+
+            for(let i=0; i<totalHearts; i++) {
+                // Lấy vị trí ngẫu nhiên TRONG phạm vi elip tán cây
+                // Sử dụng công thức parametric của elip với một chút ngẫu nhiên về bán kính để mọc đều
+                const angle = Math.random() * Math.PI * 2;
+                const rFactor = 0.5 + Math.random() * 0.5; // Tập trung mọc từ trong ra ngoài (rFactor <= 1)
+                const x = elipseCenterX + elipseRx * rFactor * Math.cos(angle) - 6; // -6 để căn giữa shape 12x12
+                const y = elipseCenterY + elipseRy * rFactor * Math.sin(angle) - 6;
+                
+                const color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                
+                createHeart(x, y, color, delayCount);
+                delayCount += delayStep;
+            }
+        }
+
+        // --- 3. JAVASCRIPT TẠO HIỆU ỨNG PHÁO HOA ---
+        // Màu sắc pháo hoa tương ứng với trái tim
+        const fireworkColors = ['#fbc02d', '#0288d1', '#d81b60', '#fdfbfb', '#fbc02d'];
+
+        function fireworkPop(x, y) {
+            const numParticles = 30; // Số hạt nổ
+            for(let i=0; i<numParticles; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('firework-particle');
+                
+                // Vị trí nổ ban đầu
+                particle.style.left = x
