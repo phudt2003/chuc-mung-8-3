@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chúc Mừng Ngày 8/3 🌸</title>
+    <title>Gửi Ngàn Lời Chúc 8/3 - Perfect Gift 🌸</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Montserrat:wght@400;600&display=swap');
+        /* --- 1. FONTS & RESET --- */
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;400;600&display=swap');
 
         * {
             box-sizing: border-box;
@@ -15,93 +16,223 @@
 
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #ffd3e0 0%, #fbc2eb 100%);
             height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Khóa cuộn màn hình để hiệu ứng rơi đẹp nhất */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            /* Nền gradient hoàng hôn tím hồng lãng mạn */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            perspective: 1000px; /* Tạo hiệu ứng 3D nhẹ cho thẻ */
         }
 
+        /* --- 2. HIỆU ỨNG nỀN: HOA & TRÁI TIM RƠI (JS sinh ra) --- */
+        .falling-element {
+            position: absolute;
+            top: -50px;
+            pointer-events: none; /* Không cản trở việc click vào thẻ */
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0) rotate(0deg) translateX(0);
+                opacity: 1;
+            }
+            100% {
+                /* Rơi xuống quá màn hình, xoay ngẫu nhiên, đưa sang ngang nhẹ */
+                transform: translateY(110vh) rotate(720deg) translateX(50px);
+                opacity: 0;
+            }
+        }
+
+        /* --- 3. THE CARD (THIỆP MAIN) --- */
         .card {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px); /* Hiệu ứng kính mờ modern */
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 45px rgba(216, 27, 96, 0.2);
             text-align: center;
-            max-width: 450px;
+            max-width: 480px;
             width: 90%;
-            border: 2px solid #ffb6c1;
-            animation: fadeIn 1.5s ease-in-out;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            z-index: 10; /* Nổi lên trên nền hoa rơi */
+            
+            /* Hiệu ứng xuất hiện lúc tải trang */
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            animation: cardEntrance 1.2s ease-out forwards;
+            animation-delay: 0.5s;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* --- 4. CÁC PHẦN TỬ TRONG THIỆP --- */
+        .icon-header {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: heartBeat 1.5s infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
         }
 
         h1 {
             font-family: 'Dancing Script', cursive;
-            color: #d81b60;
-            font-size: 2.8rem;
+            color: #d81b60; /* Màu hồng đậm */
+            font-size: 3.2rem;
             margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
 
-        p {
-            color: #555;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
+        /* Hiệu ứng chữ xuất hiện dần từng đoạn */
+        .wish-text {
+            color: #444;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            font-weight: 300;
         }
 
-        .music-player {
+        .fade-in-line {
+            opacity: 0;
+            transform: translateY(15px);
+            animation: fadeInLine 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInLine {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- 5. MUSIC PLAYER CUSTOME DƠN GIẢN --- */
+        .music-wrapper {
             margin-top: 20px;
-            padding: 15px;
-            background: #fff0f5;
+            padding: 20px;
+            background: rgba(216, 27, 96, 0.05);
             border-radius: 15px;
-            border: 1px dashed #ff69b4;
+            border: 1px dashed #ffb6c1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
         }
 
-        .music-title {
-            font-weight: 600;
-            color: #d81b60;
-            margin-bottom: 10px;
+        .song-info {
             font-size: 0.9rem;
+            color: #888;
+            font-weight: 600;
+        }
+        
+        .song-title {
+            color: #d81b60;
+            font-size: 1rem;
         }
 
-        /* Tùy chỉnh thanh audio */
+        /* Custom lại nút audio cho đẹp hơn */
         audio {
             width: 100%;
+            height: 35px;
             outline: none;
         }
-
-        .flower {
-            font-size: 3rem;
-            display: inline-block;
-            animation: rotateFlower 5s infinite linear;
+        
+        /* Tùy chỉnh màu thanh audio trên Chrome/Safari */
+        audio::-webkit-media-controls-panel {
+            background-color: #fff0f5;
+        }
+        audio::-webkit-media-controls-play-button,
+        audio::-webkit-media-controls-current-time-display,
+        audio::-webkit-media-controls-time-remaining-display,
+        audio::-webkit-media-controls-timeline,
+        audio::-webkit-media-controls-volume-slider {
+            color: #d81b60;
         }
 
-        @keyframes rotateFlower {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
 
+    <div id="falling-container"></div>
+
     <div class="card">
-        <div class="flower">🌸</div>
-        <h1>Chúc Mừng 8/3!</h1>
-        <p>Chúc bạn có một ngày Quốc tế Phụ nữ thật nhiều niềm vui, luôn xinh đẹp và hạnh phúc. Đối với thế giới này, bạn luôn là một điều "Perfect" nhất! ❤️</p>
+        <div class="icon-header">💝</div>
         
-        <div class="music-player">
-            <div class="music-title">🎵 Đang phát: Perfect - Ed Sheeran</div>
+        <h1>Happy March 8th</h1>
+        
+        <div class="wish-text">
+            <p class="fade-in-line" style="animation-delay: 1.5s;">Gửi đến người phụ nữ tuyệt vời nhất,</p>
+            <p class="fade-in-line" style="animation-delay: 2.3s;">Chúc bạn một ngày 8/3 trọn vẹn niềm vui,</p>
+            <p class="fade-in-line" style="animation-delay: 3.1s;">luôn xinh đẹp, tự tin và hạnh phúc.</p>
+            <p class="fade-in-line" style="animation-delay: 4.0s;">You look **Perfect** tonight & every night! ❤️</p>
+        </div>
+        
+        <div class="music-wrapper fade-in-line" style="animation-delay: 5.0s;">
+            <div class="song-info">
+                <span>🎵 Now Playing:</span>
+                <span class="song-title">Perfect - Ed Sheeran</span>
+            </div>
             <audio controls autoplay loop>
                 <source src="Perfect.mp3" type="audio/mpeg">
-                Trình duyệt của bạn không hỗ trợ phát nhạc.
+                Trình duyệt không hỗ trợ nghe nhạc.
             </audio>
         </div>
     </div>
+
+    <script>
+        // --- JAVASCRIPT TẠO HIỆU ỨNG nỀN RƠI ---
+        const container = document.getElementById('falling-container');
+        
+        // Danh sách các emoji sẽ rơi (Hoa hồng, Trái tim, Hoa đào)
+        const items = ['🌹', '❤️', '🌸', '💖', '✨'];
+        
+        function createFallingItem() {
+            const element = document.createElement('div');
+            element.classList.add('falling-element');
+            
+            // Lấy ngẫu nhiên một icon
+            element.innerText = items[Math.floor(Math.random() * items.length)];
+            
+            // Vị trí ngang ngẫu nhiên (0vw đến 100vw)
+            element.style.left = Math.random() * 100 + 'vw';
+            
+            // Kích thước ngẫu nhiên (1rem đến 2.5rem)
+            element.style.fontSize = Math.random() * 1.5 + 1 + 'rem';
+            
+            // Tốc độ rơi ngẫu nhiên (3 giây đến 8 giây)
+            element.style.animationDuration = Math.random() * 5 + 3 + 's';
+            
+            // Độ mờ ngẫu nhiên để tạo chiều sâu
+            element.style.opacity = Math.random() * 0.5 + 0.5;
+
+            container.appendChild(element);
+
+            // Tự xóa phần tử sau khi rơi xong để tránh nặng máy
+            setTimeout(() => {
+                element.remove();
+            }, 8000);
+        }
+
+        // Tạo phần tử mới mỗi 200ms (5 phần tử/giây)
+        setInterval(createFallingItem, 200);
+        
+        // Tạo sẵn một ít lúc mới vào
+        for(let i=0; i<10; i++) {
+            setTimeout(createFallingItem, i * 100);
+        }
+    </script>
 
 </body>
 </html>
