@@ -25,9 +25,9 @@ z-index:10;
 }
 
 h1{
-font-size:60px;
-text-shadow:0 0 20px #ff4d6d,0 0 40px #ff4d6d;
-animation:float 3s ease-in-out infinite;
+font-size:55px;
+text-shadow:0 0 20px #ff4d6d;
+animation:float 3s infinite;
 }
 
 @keyframes float{
@@ -37,11 +37,26 @@ animation:float 3s ease-in-out infinite;
 }
 
 #text{
-font-size:24px;
+font-size:22px;
 margin-top:20px;
 }
 
-/* tim bay lên */
+/* chữ hướng dẫn */
+#start{
+position:absolute;
+bottom:40px;
+font-size:14px;
+opacity:0.8;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+0%{opacity:0.2;}
+50%{opacity:1;}
+100%{opacity:0.2;}
+}
+
+/* tim bay */
 .heart{
 position:absolute;
 animation:fly linear forwards;
@@ -58,12 +73,11 @@ opacity:0;
 }
 }
 
-/* tim tỏa ra */
+/* tim tỏa */
 .burst{
 position:absolute;
 left:50%;
 top:50%;
-transform:translate(-50%,-50%);
 animation:burst 2s linear forwards;
 }
 
@@ -78,7 +92,7 @@ opacity:0;
 }
 }
 
-/* tim lớn giữa */
+/* tim giữa */
 .centerHeart{
 position:absolute;
 font-size:80px;
@@ -107,18 +121,15 @@ animation:pulse 1s infinite;
 
 <div class="centerHeart">💖</div>
 
+<div id="start">Nhấp vào màn hình trong 5s để bắt đầu</div>
+
 <audio id="music" loop>
-<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_3d8f8a9e4f.mp3">
 </audio>
 
 <script>
 
-/* bật nhạc */
-document.body.addEventListener("click",function(){
-document.getElementById("music").play();
-});
-
-/* chữ hiện dần */
+/* chữ chạy chậm */
 let message="Chúc bạn luôn xinh đẹp, hạnh phúc và thành công 💖";
 let i=0;
 
@@ -126,16 +137,26 @@ function typing(){
 if(i<message.length){
 document.getElementById("text").innerHTML+=message.charAt(i);
 i++;
-setTimeout(typing,70);
+setTimeout(typing,120);
 }
 }
+
+/* bật nhạc khi click */
+document.body.addEventListener("click",function(){
+
+document.getElementById("music").play();
+
+document.getElementById("start").style.display="none";
 
 typing();
 
-/* tim bay lên */
+});
+
+/* tim bay */
 function createHeart(){
 
 let heart=document.createElement("div");
+
 heart.className="heart";
 heart.innerHTML="❤️";
 
@@ -153,7 +174,7 @@ heart.remove();
 
 setInterval(createHeart,400);
 
-/* tim tỏa ra từ giữa */
+/* tim tỏa từ giữa */
 function burstHeart(){
 
 let heart=document.createElement("div");
