@@ -387,27 +387,59 @@
         ];
 function drawTreeBase(){
 
-    // THÂN CÂY
+    // THÂN CÂY (cong tự nhiên)
     const trunk = document.createElementNS("http://www.w3.org/2000/svg","path");
 
     trunk.setAttribute(
         "d",
         `
         M300 460
-        L300 380
-        L285 340
-        L300 300
-        L315 340
-        L300 380
+        C300 430 295 400 300 370
+        C305 340 300 320 300 300
         `
     );
 
     trunk.style.stroke = "#6b4325";
-    trunk.style.strokeWidth = "26";
+    trunk.style.strokeWidth = "28";
     trunk.style.fill = "none";
     trunk.style.strokeLinecap = "round";
 
     treeSvg.appendChild(trunk);
+
+
+    // NHÁNH CHỮ Y
+    const branchLeft = document.createElementNS("http://www.w3.org/2000/svg","path");
+    branchLeft.setAttribute(
+        "d",
+        `
+        M300 320
+        C280 300 270 270 260 240
+        `
+    );
+
+    branchLeft.style.stroke = "#6b4325";
+    branchLeft.style.strokeWidth = "18";
+    branchLeft.style.fill = "none";
+    branchLeft.style.strokeLinecap = "round";
+
+    treeSvg.appendChild(branchLeft);
+
+
+    const branchRight = document.createElementNS("http://www.w3.org/2000/svg","path");
+    branchRight.setAttribute(
+        "d",
+        `
+        M300 320
+        C320 300 330 270 340 240
+        `
+    );
+
+    branchRight.style.stroke = "#6b4325";
+    branchRight.style.strokeWidth = "18";
+    branchRight.style.fill = "none";
+    branchRight.style.strokeLinecap = "round";
+
+    treeSvg.appendChild(branchRight);
 
 
     // RỄ CÂY
@@ -416,12 +448,10 @@ function drawTreeBase(){
     roots.setAttribute(
         "d",
         `
-        M300 460 L260 500
-        M300 460 L280 520
-        M300 460 L320 520
-        M300 460 L340 500
-        M285 480 L250 520
-        M315 480 L350 520
+        M300 460 C270 470 250 500 230 520
+        M300 460 C285 490 270 520 260 540
+        M300 460 C315 490 330 520 340 540
+        M300 460 C330 470 350 500 370 520
         `
     );
 
