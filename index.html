@@ -385,15 +385,59 @@
             '#ff9933', '#ff1a75', '#0099ff', '#ffb366', '#d81b60', 
             '#ff0066', '#9933ff', '#ff5050'
         ];
+function drawTreeBase(){
 
+    // THÂN CÂY
+    const trunk = document.createElementNS("http://www.w3.org/2000/svg","path");
+
+    trunk.setAttribute(
+        "d",
+        `
+        M300 460
+        L300 380
+        L285 340
+        L300 300
+        L315 340
+        L300 380
+        `
+    );
+
+    trunk.style.stroke = "#6b4325";
+    trunk.style.strokeWidth = "26";
+    trunk.style.fill = "none";
+    trunk.style.strokeLinecap = "round";
+
+    treeSvg.appendChild(trunk);
+
+
+    // RỄ CÂY
+    const roots = document.createElementNS("http://www.w3.org/2000/svg","path");
+
+    roots.setAttribute(
+        "d",
+        `
+        M300 460 L260 500
+        M300 460 L280 520
+        M300 460 L320 520
+        M300 460 L340 500
+        M285 480 L250 520
+        M315 480 L350 520
+        `
+    );
+
+    roots.style.stroke = "#6b4325";
+    roots.style.strokeWidth = "12";
+    roots.style.fill = "none";
+    roots.style.strokeLinecap = "round";
+
+    treeSvg.appendChild(roots);
+}
         function startGrowingTree() {
             treeSvg.innerHTML = '';
             heartCanopy.innerHTML = '';
 
-            drawBranch(300, 460, 100, -Math.PI / 2, 7, 18);
-            drawBranch(300, 460, 50, Math.PI / 3, 3, 14);     
-            drawBranch(300, 460, 50, 2 * Math.PI / 3, 3, 14); 
-            drawBranch(300, 460, 30, Math.PI / 2, 2, 16);     
+            drawTreeBase();
+            drawBranch(300, 350, 90, -Math.PI / 2, 6, 12);  
 
             setTimeout(() => {
                 const totalHearts = 500; 
